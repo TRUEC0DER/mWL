@@ -1,0 +1,42 @@
+whitelist:
+  status: false
+database:
+  mongo:
+    url: "mongodb://admin:admin@127.0.0.1/mwl"
+    name: "mwl"
+    collections:
+      users: "users"
+messages:
+  prefix: "<#1aeb71><bold>mWL » <reset>"
+  help:
+    - "<#1aeb71><bold>mWL » <reset>"
+    - ""
+    - "<#1aeb71><bold>| <reset><#1aeb71>/mwl toggle [on|off] - <white>Change the whitelist status. Using without arguments display the whitelist status."
+    - "<#1aeb71><bold>| <reset><#1aeb71>/mwl add [nickname] - <white>Add user to whitelist."
+    - "<#1aeb71><bold>| <reset><#1aeb71>/mwl remove [nickname] - <white>Remove user from whitelist."
+    - "<#1aeb71><bold>| <reset><#1aeb71>/mwl list - <white>View all users in whitelist."
+    - "<#1aeb71><bold>| <reset><#1aeb71>/mwl reload - <white>Reload plugin config. It doesn't reload the database."
+  whitelist:
+    not-in-whitelist: "<#eb1a3d>You are not on the server's whitelist, contact the administration if this may be an error."
+    toggle:
+      enabled: "<white>You have <#1aeb71>enabled <white>the whitelist!"
+      disabled: "<white>You have <#eb1a3d>disabled <white>the whitelist!"
+      status:
+        enabled: "<#1aeb71>enabled"
+        disabled: "<#eb1a3d>disabled"
+        info: "<white>Whitelist status: %whitelist_status%."
+    add:
+      info: "<white>You have <#1aeb71>added <white>a <#1aeb71>%player_name% <white>player to the whitelist!"
+      need-more-args: "<white>You must write the player's nickname!"
+      already-whitelisted: "<white>Player <#eb1a3d>%player_name% <white>already in whitelist!"
+    remove:
+      info: "<white>You have <#eb1a3d>removed <white>the player <#eb1a3d>%player_name% <white>from the whitelist!"
+      need-more-args: "<white>You must write the player's nickname!"
+      not-in-whitelist: "<white>The player <#eb1a3d>%player_name% <white>is not in whitelist!"
+    list:
+      info: "<white>Whitelist:</white> %whitelist_list%"
+      empty: "<white>Whitelist is empty."
+      user: "<#1aeb71>%player_name%<#1aeb71>"
+      separator: "<white> | "
+    reload: "<#1aeb71>Plugin reloaded!"
+  not-perms: "<#eb1a3d>You don't have permissions to use this command."

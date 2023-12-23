@@ -1,0 +1,12 @@
+name: mWL
+version: '${version}'
+main: me.truec0der.mwhitelist.MWhitelist
+api-version: '1.16'
+load: STARTUP
+authors: [ TRUEC0DER ]
+description: Server whitelist using MongoDB
+website: https://github.com/TRUEC0DER
+commands:
+  mwhitelist:
+    description: "Customizable server whitelist using MongoDB"
+    aliases: [ mwl ]
