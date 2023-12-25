@@ -1,5 +1,6 @@
 package me.truec0der.mwhitelist.commands;
 
+import me.truec0der.mwhitelist.MWhitelist;
 import me.truec0der.mwhitelist.managers.ConfigManager;
 import me.truec0der.mwhitelist.models.ConfigModel;
 import me.truec0der.mwhitelist.utils.MessageUtil;
@@ -10,43 +11,53 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class CommandToggle {
-    private static void sendStatusMessage(Audience sender) {
-        boolean whitelistStatus = ConfigModel.getWhitelistStatus();
+    private ConfigManager configManager;
+    private ConfigModel configModel;
+    private MessageUtil messageUtil;
+
+    public CommandToggle(ConfigManager configManager, ConfigModel configModel, MessageUtil messageUtil) {
+        this.configManager = configManager;
+        this.configModel = configModel;
+        this.messageUtil = messageUtil;
+    }
+
+    private void sendStatusMessage(Audience sender) {
+        boolean whitelistStatus = configModel.getWhitelistStatus();
         Map<String, String> statusPlaceholders = new HashMap<>();
         statusPlaceholders.put(
                 "whitelist_status",
-                whitelistStatus ? ConfigModel.getMessageWhitelistStatusEnabled() : ConfigModel.getMessageWhitelistStatusDisabled()
+                whitelistStatus ? configModel.getMessageWhitelistStatusEnabled() : configModel.getMessageWhitelistStatusDisabled()
         );
-        Component statusMessage = MessageUtil.createWithPrefix(
-                ConfigModel.getMessageWhitelistStatusInfo(),
+        Component statusMessage = messageUtil.create(
+                configModel.getMessageWhitelistStatusInfo(),
                 statusPlaceholders
         );
         sender.sendMessage(statusMessage);
     }
 
-    private static void enableWhitelist(Audience sender) {
-        ConfigManager.getConfig().set("whitelist.status", true);
-        ConfigManager.save();
+    private void enableWhitelist(Audience sender) {
+        configManager.getConfig().set("whitelist.status", true);
+        configManager.save();
 
-        ConfigManager.reloadConfig();
-        ConfigModel.reloadConfig();
+        configManager.reloadConfig();
+        configModel.reloadConfig();
 
-        Component enabledMessage = MessageUtil.createWithPrefix(
-                ConfigModel.getMessageWhitelistEnabled()
+        Component enabledMessage = messageUtil.create(
+                configModel.getMessageWhitelistEnabled()
         );
 
         sender.sendMessage(enabledMessage);
     }
 
-    private static void disableWhitelist(Audience sender) {
-        ConfigManager.getConfig().set("whitelist.status", false);
-        ConfigManager.save();
+    private void disableWhitelist(Audience sender) {
+        configManager.getConfig().set("whitelist.status", false);
+        configManager.save();
 
-        ConfigManager.reloadConfig();
-        ConfigModel.reloadConfig();
+        configManager.reloadConfig();
+        configModel.reloadConfig();
 
-        Component disableMessage = MessageUtil.createWithPrefix(
-                ConfigModel.getMessageWhitelistDisabled()
+        Component disableMessage = messageUtil.create(
+                configModel.getMessageWhitelistDisabled()
         );
 
         sender.sendMessage(disableMessage);

@@ -11,14 +11,24 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class CommandRemove {
-    public static boolean execute(Audience sender, String[] args) {
+    private ConfigModel configModel;
+    private MongoDBUserModel mongoDBUserModel;
+    private MessageUtil messageUtil;
+
+    public CommandRemove(ConfigModel configModel, MongoDBUserModel mongoDBUserModel, MessageUtil messageUtil) {
+        this.configModel = configModel;
+        this.messageUtil = messageUtil;
+        this.mongoDBUserModel = mongoDBUserModel;
+    }
+
+    public boolean execute(Audience sender, String[] args) {
         if (args.length < 2) {
             sendNeedMoreArgsMessage(sender);
             return true;
         }
 
         String playerName = args[1];
-        Document findUserInWhitelist = MongoDBUserModel.findByNickname(playerName);
+        Document findUserInWhitelist = mongoDBUserModel.findByNickname(playerName);
 
         if (findUserInWhitelist == null) {
             sendNotInWhitelist(sender, playerName);
@@ -30,25 +40,25 @@ public class CommandRemove {
         return true;
     }
 
-    private static void sendNeedMoreArgsMessage(Audience sender) {
-        Component needMoreArgs = MessageUtil.createWithPrefix(ConfigModel.getMessageWhitelistRemoveNeedMoreArgs());
+    private void sendNeedMoreArgsMessage(Audience sender) {
+        Component needMoreArgs = messageUtil.create(configModel.getMessageWhitelistRemoveNeedMoreArgs());
         sender.sendMessage(needMoreArgs);
     }
 
-    private static void sendNotInWhitelist(Audience sender, String playerName) {
+    private void sendNotInWhitelist(Audience sender, String playerName) {
         Map<String, String> notInWhitelistPlaceholders = new HashMap<>();
         notInWhitelistPlaceholders.put("player_name", playerName);
-        Component notInWhitelist = MessageUtil.createWithPrefix(ConfigModel.getMessageWhitelistRemoveNotInWhitelist(), notInWhitelistPlaceholders);
+        Component notInWhitelist = messageUtil.create(configModel.getMessageWhitelistRemoveNotInWhitelist(), notInWhitelistPlaceholders);
         sender.sendMessage(notInWhitelist);
     }
 
-    private static void removeFromWhitelist(Audience sender, String playerName) {
+    private void removeFromWhitelist(Audience sender, String playerName) {
         Map<String, String> removeFromWhitelistPlaceholders = new HashMap<>();
         removeFromWhitelistPlaceholders.put("player_name", playerName);
 
-        MongoDBUserModel.deleteByNickname(playerName);
+        mongoDBUserModel.deleteByNickname(playerName);
 
-        Component removeFromWhitelist = MessageUtil.createWithPrefix(ConfigModel.getMessageWhitelistRemoveInfo(), removeFromWhitelistPlaceholders);
+        Component removeFromWhitelist = messageUtil.create(configModel.getMessageWhitelistRemoveInfo(), removeFromWhitelistPlaceholders);
         sender.sendMessage(removeFromWhitelist);
     }
 }

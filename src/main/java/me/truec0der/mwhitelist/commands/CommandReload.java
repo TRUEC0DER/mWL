@@ -8,10 +8,20 @@ import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 
 public class CommandReload {
-    public static boolean execute(Audience sender) {
-        ConfigManager.reloadConfig();
-        ConfigModel.reloadConfig();
-        Component reloadMessage = MessageUtil.createWithPrefix(ConfigModel.getMessagePluginReload());
+    private ConfigManager configManager;
+    private ConfigModel configModel;
+    private MessageUtil messageUtil;
+
+    public CommandReload(ConfigManager configManager, ConfigModel configModel, MessageUtil messageUtil) {
+        this.configManager = configManager;
+        this.configModel = configModel;
+        this.messageUtil = messageUtil;
+    }
+
+    public boolean execute(Audience sender) {
+        configManager.reloadConfig();
+        configManager.reloadConfig();
+        Component reloadMessage = messageUtil.create(configModel.getMessagePluginReload());
         sender.sendMessage(reloadMessage);
         return true;
     }

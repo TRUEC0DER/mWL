@@ -12,28 +12,33 @@ import org.bson.Document;
 import org.bson.conversions.Bson;
 
 public class MongoDBUserModel {
+    private MongoDBManager mongoDBManager;
+    private MongoCollection<Document> userCollection;
+    private ConfigModel configModel;
 
-    private static MongoDBManager mongoDBManager = MWhitelist.getMongoDBManager();
-    private static MongoCollection<Document> userCollection = mongoDBManager.getCollection(ConfigModel.getMongoCollectionUser());
+    public MongoDBUserModel(MongoDBManager mongoDBManager, ConfigModel configModel) {
+        this.mongoDBManager = mongoDBManager;
+        this.configModel = configModel;
+        this.userCollection = mongoDBManager.getCollection(configModel.getMongoCollectionUser());
+    }
 
-
-    public static InsertOneResult insertOne(String nickname) {
+    public InsertOneResult insertOne(String nickname) {
         Document userDocument = new Document()
                 .append("nickname", nickname);
 
         return userCollection.insertOne(userDocument);
     }
 
-    public static FindIterable<Document> findAll() {
+    public FindIterable<Document> findAll() {
         return userCollection.find();
     }
 
-    public static Document findByNickname(String nickname) {
+    public Document findByNickname(String nickname) {
         Bson filter = Filters.eq("nickname", nickname);
         return userCollection.find(filter).first();
     }
 
-    public static DeleteResult deleteByNickname(String nickname) {
+    public DeleteResult deleteByNickname(String nickname) {
         Bson filter = Filters.eq("nickname", nickname);
         return userCollection.deleteOne(filter);
     }

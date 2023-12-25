@@ -3,29 +3,28 @@ package me.truec0der.mwhitelist.managers;
 import lombok.Getter;
 import me.truec0der.mwhitelist.MWhitelist;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.plugin.java.JavaPlugin;
 
 public class ConfigManager {
-    private static MWhitelist instance;
+    private JavaPlugin instance;
 
     @Getter
-    private static FileConfiguration config;
+    private FileConfiguration config;
 
-    public static void init() {
-        instance = MWhitelist.getInstance();
-        config = instance.getConfig();
+    public ConfigManager(MWhitelist instance) {
+        this.instance = instance;
 
-        config.options().copyDefaults(true);
-        instance.saveConfig();
+        this.config = this.instance.getConfig();
+        this.config.options().copyDefaults(true);
+        this.instance.saveConfig();
     }
 
-    public static void reloadConfig() {
-        instance.reloadConfig();
-
-        instance = MWhitelist.getInstance();
-        config = instance.getConfig();
+    public void reloadConfig() {
+        this.instance.reloadConfig();
+        this.config = this.instance.getConfig();
     }
 
-    public static void save() {
-        instance.saveConfig();
+    public void save() {
+        this.instance.saveConfig();
     }
 }

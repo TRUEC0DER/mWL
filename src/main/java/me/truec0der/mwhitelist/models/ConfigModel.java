@@ -7,61 +7,64 @@ import org.bukkit.configuration.file.FileConfiguration;
 import java.util.List;
 
 public class ConfigModel {
-    @Getter
-    private static Boolean whitelistStatus;
-    @Getter
-    private static String mongoUrl;
-    @Getter
-    private static String mongoName;
-    @Getter
-    private static String mongoCollectionUser;
-    @Getter
-    private static String messagePrefix;
-    @Getter
-    private static List<String> messageHelp;
-    @Getter
-    private static String messageWhitelistEnabled;
-    @Getter
-    private static String messageWhitelistDisabled;
-    @Getter
-    private static String messageWhitelistStatusInfo;
-    @Getter
-    private static String messageWhitelistStatusEnabled;
-    @Getter
-    private static String messageWhitelistStatusDisabled;
-    @Getter
-    private static String messageWhitelistNotIn;
-    @Getter
-    private static String messageWhitelistAddInfo;
-    @Getter
-    private static String messageWhitelistAddNeedMoreArgs;
-    @Getter
-    private static String messageWhitelistAddAlreadyWhitelisted;
-    @Getter
-    private static String messageWhitelistRemoveInfo;
-    @Getter
-    private static String messageWhitelistRemoveNeedMoreArgs;
-    @Getter
-    private static String messageWhitelistRemoveNotInWhitelist;
-    @Getter
-    private static String messageWhitelistListEmpty;
-    @Getter
-    private static String messageWhitelistListSeparator;
-    @Getter
-    private static String messageWhitelistListUser;
-    @Getter
-    private static String messageWhitelistListInfo;
-    @Getter
-    private static String messageNotPerms;
-    @Getter
-    private static String messagePluginReload;
+    private ConfigManager configManager;
 
-    static {
+    @Getter
+    private Boolean whitelistStatus;
+    @Getter
+    private String mongoUrl;
+    @Getter
+    private String mongoName;
+    @Getter
+    private String mongoCollectionUser;
+    @Getter
+    private String messagePrefix;
+    @Getter
+    private List<String> messageHelp;
+    @Getter
+    private String messageWhitelistEnabled;
+    @Getter
+    private String messageWhitelistDisabled;
+    @Getter
+    private String messageWhitelistStatusInfo;
+    @Getter
+    private String messageWhitelistStatusEnabled;
+    @Getter
+    private String messageWhitelistStatusDisabled;
+    @Getter
+    private String messageWhitelistNotIn;
+    @Getter
+    private String messageWhitelistAddInfo;
+    @Getter
+    private String messageWhitelistAddNeedMoreArgs;
+    @Getter
+    private String messageWhitelistAddAlreadyWhitelisted;
+    @Getter
+    private String messageWhitelistRemoveInfo;
+    @Getter
+    private String messageWhitelistRemoveNeedMoreArgs;
+    @Getter
+    private String messageWhitelistRemoveNotInWhitelist;
+    @Getter
+    private String messageWhitelistListEmpty;
+    @Getter
+    private String messageWhitelistListSeparator;
+    @Getter
+    private String messageWhitelistListUser;
+    @Getter
+    private String messageWhitelistListInfo;
+    @Getter
+    private String messageNotPerms;
+    @Getter
+    private String messagePluginReload;
+
+    public ConfigModel(ConfigManager configManager) {
+        this.configManager = configManager;
         reloadConfig();
     }
 
-    public static void reloadConfig() {
-        FileConfiguration config = ConfigManager.getConfig();
+    public void reloadConfig() {
+        FileConfiguration config = this.configManager.getConfig();
 
         whitelistStatus = config.getBoolean("whitelist.status");
         mongoUrl = config.getString("database.mongo.url");

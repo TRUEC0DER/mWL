@@ -1,5 +1,6 @@
 package me.truec0der.mwhitelist.events;
 
+import me.truec0der.mwhitelist.MWhitelist;
 import me.truec0der.mwhitelist.managers.ConfigManager;
 import me.truec0der.mwhitelist.models.ConfigModel;
 import me.truec0der.mwhitelist.models.mongodb.MongoDBUserModel;
@@ -10,15 +11,24 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerLoginEvent;
 
 public class PlayerLoginEventListener implements Listener {
+    private ConfigModel configModel;
+    private MongoDBUserModel mongoDBUserModel;
+    private MessageUtil messageUtil;
+
+    public PlayerLoginEventListener(ConfigModel configModel, MongoDBUserModel mongoDBUserModel, MessageUtil messageUtil) {
+        this.configModel = configModel;
+        this.messageUtil = messageUtil;
+        this.mongoDBUserModel = mongoDBUserModel;
+    }
     @EventHandler
     public void onPlayerLogin(PlayerLoginEvent event) {
         String playerName = event.getPlayer().getName();
-        Document findPlayer = MongoDBUserModel.findByNickname(playerName);
+        Document findPlayer = mongoDBUserModel.findByNickname(playerName);
 
-        boolean whitelistStatus = ConfigManager.getConfig().getBoolean("whitelist.status");
+        boolean whitelistStatus = configModel.getWhitelistStatus();
 
         if (findPlayer == null && whitelistStatus) {
-            event.disallow(PlayerLoginEvent.Result.KICK_WHITELIST, MessageUtil.createWithoutPrefix(ConfigModel.getMessageWhitelistNotIn()));
+            event.disallow(PlayerLoginEvent.Result.KICK_WHITELIST, messageUtil.create(configModel.getMessageWhitelistNotIn()));
         }
     }
 }
