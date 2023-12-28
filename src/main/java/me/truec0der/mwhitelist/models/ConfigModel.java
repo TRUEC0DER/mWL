@@ -12,6 +12,8 @@ public class ConfigModel {
     @Getter
     private Boolean whitelistStatus;
     @Getter
+    private String databaseType;
+    @Getter
     private String mongoUrl;
     @Getter
     private String mongoName;
@@ -67,6 +69,7 @@ public class ConfigModel {
         FileConfiguration config = this.configManager.getConfig();
 
         whitelistStatus = config.getBoolean("whitelist.status");
+        databaseType = config.getString("database.type");
         mongoUrl = config.getString("database.mongo.url");
         mongoName = config.getString("database.mongo.name");
         mongoCollectionUser = config.getString("database.mongo.collections.users");

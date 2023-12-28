@@ -1,25 +1,26 @@
 package me.truec0der.mwhitelist.commands;
 
-import com.mongodb.client.FindIterable;
+import me.truec0der.mwhitelist.database.Database;
 import me.truec0der.mwhitelist.models.ConfigModel;
-import me.truec0der.mwhitelist.models.mongodb.MongoDBUserModel;
+import me.truec0der.mwhitelist.models.UserModel;
 import me.truec0der.mwhitelist.utils.MessageUtil;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
-import org.bson.Document;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class CommandList {
     private ConfigModel configModel;
-    private MongoDBUserModel mongoDBUserModel;
+    private Database database;
     private MessageUtil messageUtil;
 
-    public CommandList(ConfigModel configModel, MongoDBUserModel mongoDBUserModel, MessageUtil messageUtil) {
+    public CommandList(ConfigModel configModel, Database database, MessageUtil messageUtil) {
         this.configModel = configModel;
         this.messageUtil = messageUtil;
-        this.mongoDBUserModel = mongoDBUserModel;
+        this.database = database;
     }
 
     private void sendEmptyWhitelistMessage(Audience sender) {
@@ -42,15 +43,16 @@ public class CommandList {
 
 
     public boolean execute(Audience sender) {
-        FindIterable<Document> documents = mongoDBUserModel.findAll();
-        List<String> whitelist = documents.map(doc ->
-                doc.getString("nickname")
-        ).into(new ArrayList<>());
+        List<UserModel> users = database.getUsers();
 
-        if (whitelist.isEmpty()) {
+        if (users.isEmpty()) {
             sendEmptyWhitelistMessage(sender);
             return true;
         }
+
+        List<String> whitelist = users.stream()
+                .map(UserModel::getNickname)
+                .collect(Collectors.toList());
 
         String playerList = getPlayerList(whitelist);
         sendWhitelistInfoMessage(sender, playerList);

@@ -1,4 +1,4 @@
-package me.truec0der.mwhitelist.managers;
+package me.truec0der.mwhitelist.managers.database;
 
 import com.mongodb.MongoCommandException;
 import com.mongodb.client.MongoClient;

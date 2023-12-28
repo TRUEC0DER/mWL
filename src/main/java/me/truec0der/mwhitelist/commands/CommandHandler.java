@@ -1,11 +1,9 @@
 package me.truec0der.mwhitelist.commands;
 
-import me.truec0der.mwhitelist.MWhitelist;
+import me.truec0der.mwhitelist.database.Database;
 import me.truec0der.mwhitelist.managers.ConfigManager;
 import me.truec0der.mwhitelist.models.ConfigModel;
-import me.truec0der.mwhitelist.models.mongodb.MongoDBUserModel;
 import me.truec0der.mwhitelist.utils.MessageUtil;
-import net.kyori.adventure.audience.Audience;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -13,14 +11,14 @@ import org.bukkit.command.CommandSender;
 public class CommandHandler implements CommandExecutor {
     private ConfigManager configManager;
     private ConfigModel configModel;
-    private MongoDBUserModel mongoDBUserModel;
+    private Database database;
     private MessageUtil messageUtil;
 
-    public CommandHandler(ConfigManager configManager, ConfigModel configModel, MongoDBUserModel mongoDBUserModel, MessageUtil messageUtil) {
+    public CommandHandler(ConfigManager configManager, ConfigModel configModel, Database database, MessageUtil messageUtil) {
         this.configManager = configManager;
         this.configModel = configModel;
         this.messageUtil = messageUtil;
-        this.mongoDBUserModel = mongoDBUserModel;
+        this.database = database;
     }
 
     @Override
@@ -35,11 +33,11 @@ public class CommandHandler implements CommandExecutor {
             case "toggle":
                 return new CommandToggle(configManager, configModel, messageUtil).execute(sender, args);
             case "add":
-                return new CommandAdd(configModel, mongoDBUserModel, messageUtil).execute(sender, args);
+                return new CommandAdd(configModel, database, messageUtil).execute(sender, args);
             case "remove":
-                return new CommandRemove(configModel, mongoDBUserModel, messageUtil).execute(sender, args);
+                return new CommandRemove(configModel, database, messageUtil).execute(sender, args);
             case "list":
-                return new CommandList(configModel, mongoDBUserModel, messageUtil).execute(sender);
+                return new CommandList(configModel, database, messageUtil).execute(sender);
             case "reload":
                 return new CommandReload(configManager, configModel, messageUtil).execute(sender);
             default:

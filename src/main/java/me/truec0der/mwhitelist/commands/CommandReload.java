@@ -1,6 +1,5 @@
 package me.truec0der.mwhitelist.commands;
 
-import me.truec0der.mwhitelist.MWhitelist;
 import me.truec0der.mwhitelist.managers.ConfigManager;
 import me.truec0der.mwhitelist.models.ConfigModel;
 import me.truec0der.mwhitelist.utils.MessageUtil;
@@ -20,7 +19,7 @@ public class CommandReload {
 
     public boolean execute(Audience sender) {
         configManager.reloadConfig();
-        configManager.reloadConfig();
+        configModel.reloadConfig();
         Component reloadMessage = messageUtil.create(configModel.getMessagePluginReload());
         sender.sendMessage(reloadMessage);
         return true;

@@ -1,13 +1,14 @@
 whitelist:
   status: false
 database:
+  type: "yaml"
   mongo:
     url: "mongodb://admin:admin@127.0.0.1/mwl"
     name: "mwl"
     collections:
       users: "users"
 messages:
-  prefix: "<#1aeb71><bold>mWL »<reset>"
+  prefix: "<#1aeb71><bold>mWL » <reset>"
   help:
     - "%prefix%"
     - ""

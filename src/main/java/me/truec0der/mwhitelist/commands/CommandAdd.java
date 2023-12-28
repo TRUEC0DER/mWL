@@ -1,26 +1,24 @@
 package me.truec0der.mwhitelist.commands;
 
-import me.truec0der.mwhitelist.MWhitelist;
+import me.truec0der.mwhitelist.database.Database;
 import me.truec0der.mwhitelist.models.ConfigModel;
-import me.truec0der.mwhitelist.models.mongodb.MongoDBUserModel;
+import me.truec0der.mwhitelist.models.UserModel;
 import me.truec0der.mwhitelist.utils.MessageUtil;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
-import org.bson.Document;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 public class CommandAdd {
     private ConfigModel configModel;
-    private MongoDBUserModel mongoDBUserModel;
+    private Database database;
     private MessageUtil messageUtil;
 
-    public CommandAdd(ConfigModel configModel, MongoDBUserModel mongoDBUserModel, MessageUtil messageUtil) {
+    public CommandAdd(ConfigModel configModel, Database database, MessageUtil messageUtil) {
         this.configModel = configModel;
         this.messageUtil = messageUtil;
-        this.mongoDBUserModel = mongoDBUserModel;
+        this.database = database;
     }
 
     public boolean execute(Audience sender, String[] args) {
@@ -30,7 +28,7 @@ public class CommandAdd {
         }
         String playerName = args[1];
 
-        Document findUserInWhitelist = mongoDBUserModel.findByNickname(playerName);
+        UserModel findUserInWhitelist = database.getUser(playerName);
 
         if (findUserInWhitelist != null) {
             sendAlreadyInWhitelist(sender, playerName);
@@ -58,7 +56,7 @@ public class CommandAdd {
         Map<String, String> addInWhitelistPlaceholders = new HashMap<>();
         addInWhitelistPlaceholders.put("player_name", playerName);
 
-        mongoDBUserModel.insertOne(playerName);
+        database.createUser(playerName);
 
         Component addInWhitelist = messageUtil.create(configModel.getMessageWhitelistAddInfo(), addInWhitelistPlaceholders);
         sender.sendMessage(addInWhitelist);

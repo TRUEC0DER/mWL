@@ -1,24 +1,24 @@
 package me.truec0der.mwhitelist.commands;
 
+import me.truec0der.mwhitelist.database.Database;
 import me.truec0der.mwhitelist.models.ConfigModel;
-import me.truec0der.mwhitelist.models.mongodb.MongoDBUserModel;
+import me.truec0der.mwhitelist.models.UserModel;
 import me.truec0der.mwhitelist.utils.MessageUtil;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
-import org.bson.Document;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class CommandRemove {
     private ConfigModel configModel;
-    private MongoDBUserModel mongoDBUserModel;
+    private Database database;
     private MessageUtil messageUtil;
 
-    public CommandRemove(ConfigModel configModel, MongoDBUserModel mongoDBUserModel, MessageUtil messageUtil) {
+    public CommandRemove(ConfigModel configModel, Database database, MessageUtil messageUtil) {
         this.configModel = configModel;
         this.messageUtil = messageUtil;
-        this.mongoDBUserModel = mongoDBUserModel;
+        this.database = database;
     }
 
     public boolean execute(Audience sender, String[] args) {
@@ -28,7 +28,7 @@ public class CommandRemove {
         }
 
         String playerName = args[1];
-        Document findUserInWhitelist = mongoDBUserModel.findByNickname(playerName);
+        UserModel findUserInWhitelist = database.getUser(playerName);
 
         if (findUserInWhitelist == null) {
             sendNotInWhitelist(sender, playerName);
@@ -56,7 +56,7 @@ public class CommandRemove {
         Map<String, String> removeFromWhitelistPlaceholders = new HashMap<>();
         removeFromWhitelistPlaceholders.put("player_name", playerName);
 
-        mongoDBUserModel.deleteByNickname(playerName);
+        database.deleteUser(playerName);
 
         Component removeFromWhitelist = messageUtil.create(configModel.getMessageWhitelistRemoveInfo(), removeFromWhitelistPlaceholders);
         sender.sendMessage(removeFromWhitelist);
