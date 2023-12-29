@@ -2,7 +2,7 @@ whitelist:
   status: false
 database:
   type: "yaml"
-  mongo:
+  mongodb:
     url: "mongodb://admin:admin@127.0.0.1/mwl"
     name: "mwl"
     collections:
@@ -16,7 +16,7 @@ messages:
     - "<#1aeb71><bold>| <reset><#1aeb71>/mwl add [nickname] - <white>Add user to whitelist."
     - "<#1aeb71><bold>| <reset><#1aeb71>/mwl remove [nickname] - <white>Remove user from whitelist."
     - "<#1aeb71><bold>| <reset><#1aeb71>/mwl list - <white>View all users in whitelist."
-    - "<#1aeb71><bold>| <reset><#1aeb71>/mwl reload - <white>Reload plugin config. It doesn't reload the database."
+    - "<#1aeb71><bold>| <reset><#1aeb71>/mwl reload - <white>Reload plugin."
   whitelist:
     not-in-whitelist: "%prefix%<#eb1a3d>You are not on the server's whitelist, contact the administration if this may be an error."
     toggle:
@@ -35,7 +35,7 @@ messages:
       need-more-args: "%prefix%<white>You must write the player's nickname!"
       not-in-whitelist: "%prefix%<white>The player <#eb1a3d>%player_name% <white>is not in whitelist!"
     list:
-      info: "%prefix%<white>Whitelist:</white> %whitelist_list%"
+      info: "%prefix%<white>Whitelist (%whitelist_count% players):</white> %whitelist_list%"
       empty: "%prefix%<white>Whitelist is empty."
       user: "<#1aeb71>%player_name%<#1aeb71>"
       separator: "<white> | "

@@ -1,6 +1,11 @@
-# mWL - Customizable server whitelist using MongoDB
+# mWL - Customizable server whitelist
 
 The name speaks for itself. This is a plugin where you can customize **almost anything you want**.
+
+**The plugin supports databases** (There will be more of them in future):
+
+- MongoDB
+- YAML
 
 The plugin has support **HEX-colors and only MiniMessage color formatting.**
 Check more information about this: https://docs.advntr.dev/minimessage/format.html

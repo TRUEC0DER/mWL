@@ -14,6 +14,7 @@ import me.truec0der.mwhitelist.utils.MessageUtil;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class MWhitelist extends JavaPlugin {
+    private static MWhitelist instance;
     private ConfigManager configManager;
     private ConfigModel configModel;
     private Database database;
@@ -21,8 +22,21 @@ public final class MWhitelist extends JavaPlugin {
     private MongoDBManager mongoDBManager;
     private YamlDBManager yamlDBManager;
 
+    public static void reloadPlugin() {
+        instance.onDisable();
+
+        instance.mongoDBManager = null;
+        instance.yamlDBManager = null;
+        instance.database = null;
+
+        instance.reloadConfig();
+        instance.onEnable();
+    }
+
     @Override
     public void onEnable() {
+        instance = this;
+
         initializeConfig();
         initializeDatabase();
         initializeMessageUtil();
@@ -34,6 +48,7 @@ public final class MWhitelist extends JavaPlugin {
     @Override
     public void onDisable() {
         closeDatabaseConnection();
+
         getLogger().info("Plugin disabled!");
     }
 
@@ -72,7 +87,7 @@ public final class MWhitelist extends JavaPlugin {
     private void registerCommandsAndEvents() {
         String commandLabel = "mwhitelist";
         getCommand(commandLabel).setExecutor(new CommandHandler(configManager, configModel, database, messageUtil));
-        getCommand(commandLabel).setTabCompleter(new TabCompletionEventListener());
+        getCommand(commandLabel).setTabCompleter(new TabCompletionEventListener(database));
         getServer().getPluginManager().registerEvents(
                 new PlayerLoginEventListener(configModel, database, messageUtil), this
         );
@@ -81,7 +96,7 @@ public final class MWhitelist extends JavaPlugin {
     private void closeDatabaseConnection() {
         if (mongoDBManager != null) {
             mongoDBManager.closeConnection();
-            getLogger().info("Database disconnected!");
+            getLogger().info("Database MongoDB disconnected!");
         }
     }
 }

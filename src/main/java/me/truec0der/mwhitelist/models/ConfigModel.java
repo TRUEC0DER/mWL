@@ -70,9 +70,9 @@ public class ConfigModel {
 
         whitelistStatus = config.getBoolean("whitelist.status");
         databaseType = config.getString("database.type");
-        mongoUrl = config.getString("database.mongo.url");
-        mongoName = config.getString("database.mongo.name");
-        mongoCollectionUser = config.getString("database.mongo.collections.users");
+        mongoUrl = config.getString("database.mongodb.url");
+        mongoName = config.getString("database.mongodb.name");
+        mongoCollectionUser = config.getString("database.mongodb.collections.users");
         messagePrefix = config.getString("messages.prefix");
         messageHelp = config.getStringList("messages.help");
         messageWhitelistEnabled = config.getString("messages.whitelist.toggle.enabled");

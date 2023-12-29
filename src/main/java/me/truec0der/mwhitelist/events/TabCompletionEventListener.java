@@ -1,5 +1,7 @@
 package me.truec0der.mwhitelist.events;
 
+import me.truec0der.mwhitelist.database.Database;
+import me.truec0der.mwhitelist.models.UserModel;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
@@ -13,6 +15,12 @@ import java.util.stream.Collectors;
 import static java.util.Arrays.asList;
 
 public class TabCompletionEventListener implements TabCompleter {
+    private Database database;
+
+    public TabCompletionEventListener(Database database) {
+        this.database = database;
+    }
+
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
         List<String> completions = new ArrayList<>();
@@ -27,6 +35,10 @@ public class TabCompletionEventListener implements TabCompleter {
                 if (args[0].equalsIgnoreCase("toggle")) {
                     completions.addAll(asList("on", "off"));
                 }
+                if (args[0].equalsIgnoreCase("remove")) {
+                    List<String> userNames = getUserNamesFromDatabase();
+                    completions.addAll(userNames);
+                }
                 break;
         }
 
@@ -36,5 +48,14 @@ public class TabCompletionEventListener implements TabCompleter {
                 .collect(Collectors.toList());
 
         return completions;
+    }
+
+    private List<String> getUserNamesFromDatabase() {
+        List<String> userNames = new ArrayList<>();
+        List<UserModel> users = database.getUsers();
+        for (UserModel user : users) {
+            userNames.add(user.getNickname());
+        }
+        return userNames;
     }
 }
