@@ -32,16 +32,22 @@ public class CommandList {
     private void sendWhitelistInfoMessage(Audience sender, String playerList) {
         Map<String, String> infoPlaceholders = new HashMap<>();
         infoPlaceholders.put("whitelist_list", playerList);
-        infoPlaceholders.put("whitelist_count", String.valueOf(playerCount)); // Convert playerCount to String
+        infoPlaceholders.put("whitelist_count", String.valueOf(playerCount));
         Component whitelistInfo = messageUtil.create(configModel.getMessageWhitelistListInfo(), infoPlaceholders);
         sender.sendMessage(whitelistInfo);
     }
 
     private String getPlayerList(List<String> playerList) {
         playerCount = playerList.size();
-        return playerList.stream()
-                .map(playerName -> configModel.getMessageWhitelistListUser().replace("%player_name%", playerName))
-                .collect(Collectors.joining(configModel.getMessageWhitelistListSeparator()));
+        String whitelistListUserMessage = configModel.getMessageWhitelistListUser();
+        String separator = configModel.getMessageWhitelistListSeparator();
+
+        if (whitelistListUserMessage != null && separator != null) {
+            return playerList.stream()
+                    .map(playerName -> whitelistListUserMessage.replace("%player_name%", playerName))
+                    .collect(Collectors.joining(separator));
+        }
+        return whitelistListUserMessage;
     }
 
     public boolean execute(Audience sender) {

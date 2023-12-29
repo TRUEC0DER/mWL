@@ -37,7 +37,7 @@ messages:
     list:
       info: "%prefix%<white>Whitelist (%whitelist_count% players):</white> %whitelist_list%"
       empty: "%prefix%<white>Whitelist is empty."
-      user: "<#1aeb71>%player_name%<#1aeb71>"
+      user: "<#1aeb71>%player_name%</#1aeb71>"
       separator: "<white> | "
     reload: "%prefix%<#1aeb71>Plugin reloaded!"
   not-perms: "%prefix%<#eb1a3d>You don't have permissions to use this command."
