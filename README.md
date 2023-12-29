@@ -3,8 +3,6 @@
 The name speaks for itself. This is a plugin where you can customize **almost anything you want**.
 
 **The plugin supports databases** (There will be more of them in future):
-
-**The plugin supports databases** (There will be more of them in future):
 - MongoDB
 - YAML
 
