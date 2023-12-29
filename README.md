@@ -2,12 +2,9 @@
 
 The name speaks for itself. This is a plugin where you can customize **almost anything you want**.
 
-<<<<<<< HEAD
 **The plugin supports databases** (There will be more of them in future):
 
-=======
-The plugin supports databases (There will be more of them in future):
->>>>>>> ba914e764d4ac8b7fad34279b050b482367af8d7
+**The plugin supports databases** (There will be more of them in future):
 - MongoDB
 - YAML
 
