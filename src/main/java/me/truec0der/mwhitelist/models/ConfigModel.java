@@ -12,6 +12,8 @@ public class ConfigModel {
     @Getter
     private Boolean whitelistStatus;
     @Getter
+    private Boolean isSensitiveCase;
+    @Getter
     private String databaseType;
     @Getter
     private String mongoUrl;
@@ -69,6 +71,7 @@ public class ConfigModel {
         FileConfiguration config = this.configManager.getConfig();
 
         whitelistStatus = config.getBoolean("whitelist.status");
+        isSensitiveCase = config.getBoolean("whitelist.isSensitiveCase");
         databaseType = config.getString("database.type");
         mongoUrl = config.getString("database.mongodb.url");
         mongoName = config.getString("database.mongodb.name");

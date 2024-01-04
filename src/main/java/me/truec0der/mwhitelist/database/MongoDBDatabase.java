@@ -13,6 +13,7 @@ import org.bson.conversions.Bson;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 public class MongoDBDatabase implements Database {
     private MongoDBManager mongoDBManager;
@@ -58,7 +59,26 @@ public class MongoDBDatabase implements Database {
 
     @Override
     public UserModel getUser(String nickname) {
+        UserModel findUser;
+        if (configModel.getIsSensitiveCase()) {
+            findUser = getUserSensitive(nickname);
+        } else {
+            findUser = getUserInsensitive(nickname);
+        }
+        return findUser;
+    }
+
+    ;
+
+    private UserModel getUserSensitive(String nickname) {
         Bson filter = Filters.eq("nickname", nickname);
+        Document findUser = userCollection.find(filter).first();
+        if (findUser == null) return null;
+        return new UserModel(findUser.getString("nickname"));
+    }
+
+    private UserModel getUserInsensitive(String nickname) {
+        Bson filter = Filters.regex("nickname", Pattern.compile("^" + nickname + "$", Pattern.CASE_INSENSITIVE));
         Document findUser = userCollection.find(filter).first();
         if (findUser == null) return null;
         return new UserModel(findUser.getString("nickname"));

@@ -11,6 +11,7 @@ import me.truec0der.mwhitelist.managers.database.MongoDBManager;
 import me.truec0der.mwhitelist.managers.database.YamlDBManager;
 import me.truec0der.mwhitelist.models.ConfigModel;
 import me.truec0der.mwhitelist.utils.MessageUtil;
+import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class MWhitelist extends JavaPlugin {
@@ -23,13 +24,8 @@ public final class MWhitelist extends JavaPlugin {
     private YamlDBManager yamlDBManager;
 
     public static void reloadPlugin() {
-        instance.onDisable();
-
-        instance.mongoDBManager = null;
-        instance.yamlDBManager = null;
-        instance.database = null;
-
         instance.reloadConfig();
+        instance.onDisable();
         instance.onEnable();
     }
 
@@ -48,6 +44,11 @@ public final class MWhitelist extends JavaPlugin {
     @Override
     public void onDisable() {
         closeDatabaseConnection();
+        HandlerList.unregisterAll(this);
+
+        database = null;
+        mongoDBManager = null;
+        yamlDBManager = null;
 
         getLogger().info("Plugin disabled!");
     }
@@ -77,7 +78,7 @@ public final class MWhitelist extends JavaPlugin {
 
     private void initializeYamlDatabase() {
         yamlDBManager = new YamlDBManager(this, "whitelist.yml");
-        database = new YamlDatabase(yamlDBManager);
+        database = new YamlDatabase(yamlDBManager, configModel);
     }
 
     private void initializeMessageUtil() {
@@ -89,8 +90,7 @@ public final class MWhitelist extends JavaPlugin {
         getCommand(commandLabel).setExecutor(new CommandHandler(configManager, configModel, database, messageUtil));
         getCommand(commandLabel).setTabCompleter(new TabCompletionEventListener(database));
         getServer().getPluginManager().registerEvents(
-                new PlayerLoginEventListener(configModel, database, messageUtil), this
-        );
+                (new PlayerLoginEventListener(configModel, database, messageUtil)), this);
     }
 
     private void closeDatabaseConnection() {

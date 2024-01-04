@@ -1,5 +1,6 @@
 whitelist:
   status: false
+  isSensitiveCase: false
 database:
   type: "yaml"
   mongodb:
