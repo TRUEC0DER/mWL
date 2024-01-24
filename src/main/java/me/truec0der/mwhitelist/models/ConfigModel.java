@@ -13,18 +13,26 @@ public class ConfigModel {
     private Boolean whitelistStatus;
     @Getter
     private Boolean isSensitiveCase;
+
     @Getter
     private String databaseType;
+
     @Getter
     private String mongoUrl;
     @Getter
     private String mongoName;
     @Getter
     private String mongoCollectionUser;
+
     @Getter
     private String messagePrefix;
+
     @Getter
     private List<String> messageHelp;
+
+    @Getter
+    private String messageWhitelistNotIn;
+
     @Getter
     private String messageWhitelistEnabled;
     @Getter
@@ -35,20 +43,28 @@ public class ConfigModel {
     private String messageWhitelistStatusEnabled;
     @Getter
     private String messageWhitelistStatusDisabled;
-    @Getter
-    private String messageWhitelistNotIn;
+
     @Getter
     private String messageWhitelistAddInfo;
     @Getter
     private String messageWhitelistAddNeedMoreArgs;
     @Getter
     private String messageWhitelistAddAlreadyWhitelisted;
+
+    @Getter
+    private String messageWhitelistAddTempInfo;
+    @Getter
+    private String messageWhitelistAddTempNeedMoreArgs;
+    @Getter
+    private List<String> messageWhitelistAddTempTime;
+
     @Getter
     private String messageWhitelistRemoveInfo;
     @Getter
     private String messageWhitelistRemoveNeedMoreArgs;
     @Getter
     private String messageWhitelistRemoveNotInWhitelist;
+
     @Getter
     private String messageWhitelistListEmpty;
     @Getter
@@ -57,6 +73,7 @@ public class ConfigModel {
     private String messageWhitelistListUser;
     @Getter
     private String messageWhitelistListInfo;
+
     @Getter
     private String messageNotPerms;
     @Getter
@@ -72,28 +89,42 @@ public class ConfigModel {
 
         whitelistStatus = config.getBoolean("whitelist.status");
         isSensitiveCase = config.getBoolean("whitelist.isSensitiveCase");
+
         databaseType = config.getString("database.type");
+
         mongoUrl = config.getString("database.mongodb.url");
         mongoName = config.getString("database.mongodb.name");
         mongoCollectionUser = config.getString("database.mongodb.collections.users");
+
         messagePrefix = config.getString("messages.prefix");
+
         messageHelp = config.getStringList("messages.help");
+
+        messageWhitelistNotIn = config.getString("messages.whitelist.not-in-whitelist");
+
         messageWhitelistEnabled = config.getString("messages.whitelist.toggle.enabled");
         messageWhitelistDisabled = config.getString("messages.whitelist.toggle.disabled");
         messageWhitelistStatusInfo = config.getString("messages.whitelist.toggle.status.info");
         messageWhitelistStatusEnabled = config.getString("messages.whitelist.toggle.status.enabled");
         messageWhitelistStatusDisabled = config.getString("messages.whitelist.toggle.status.disabled");
-        messageWhitelistNotIn = config.getString("messages.whitelist.not-in-whitelist");
+
         messageWhitelistAddInfo = config.getString("messages.whitelist.add.info");
         messageWhitelistAddNeedMoreArgs = config.getString("messages.whitelist.add.need-more-args");
         messageWhitelistAddAlreadyWhitelisted = config.getString("messages.whitelist.add.already-whitelisted");
+
+        messageWhitelistAddTempInfo = config.getString("messages.whitelist.addtemp.info");
+        messageWhitelistAddTempNeedMoreArgs = config.getString("messages.whitelist.addtemp.need-more-args");
+        messageWhitelistAddTempTime = config.getStringList("messages.whitelist.addtemp.time");
+
         messageWhitelistRemoveInfo = config.getString("messages.whitelist.remove.info");
         messageWhitelistRemoveNeedMoreArgs = config.getString("messages.whitelist.remove.need-more-args");
         messageWhitelistRemoveNotInWhitelist = config.getString("messages.whitelist.remove.not-in-whitelist");
+
         messageWhitelistListEmpty = config.getString("messages.whitelist.list.empty");
         messageWhitelistListSeparator = config.getString("messages.whitelist.list.separator");
         messageWhitelistListUser = config.getString("messages.whitelist.list.user");
         messageWhitelistListInfo = config.getString("messages.whitelist.list.info");
+
         messageNotPerms = config.getString("messages.not-perms");
         messagePluginReload = config.getString("messages.whitelist.reload");
     }

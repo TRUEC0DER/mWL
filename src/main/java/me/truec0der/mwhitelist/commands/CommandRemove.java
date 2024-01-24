@@ -9,11 +9,12 @@ import net.kyori.adventure.text.Component;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
 public class CommandRemove {
+    private final MessageUtil messageUtil;
     private ConfigModel configModel;
     private Database database;
-    private MessageUtil messageUtil;
 
     public CommandRemove(ConfigModel configModel, Database database, MessageUtil messageUtil) {
         this.configModel = configModel;
@@ -28,14 +29,16 @@ public class CommandRemove {
         }
 
         String playerName = args[1];
-        UserModel findUserInWhitelist = database.getUser(playerName);
 
-        if (findUserInWhitelist == null) {
-            sendNotInWhitelist(sender, playerName);
-            return true;
-        }
+        CompletableFuture<UserModel> findUserInWhitelist = database.getUser(playerName);
 
-        removeFromWhitelist(sender, playerName);
+        findUserInWhitelist.thenAcceptAsync(user -> {
+            if (user == null) {
+                sendNotInWhitelist(sender, playerName);
+            } else {
+                removeFromWhitelist(sender, playerName);
+            }
+        });
 
         return true;
     }

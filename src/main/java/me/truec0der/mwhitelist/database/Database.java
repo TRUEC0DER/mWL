@@ -3,13 +3,16 @@ package me.truec0der.mwhitelist.database;
 import me.truec0der.mwhitelist.models.UserModel;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 public interface Database {
-    UserModel getUser(String nickname);
+    CompletableFuture<UserModel> getUser(String nickname);
 
-    UserModel createUser(String nickname);
+    CompletableFuture<Void> createUser(String nickname);
 
-    UserModel deleteUser(String nickname);
+    CompletableFuture<Void> deleteUser(String nickname);
 
-    List<UserModel> getUsers();
+    CompletableFuture<List<UserModel>> getUsers();
+
+    CompletableFuture<Void> setUserTime(String nickname, long time);
 }

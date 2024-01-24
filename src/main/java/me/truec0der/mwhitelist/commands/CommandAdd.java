@@ -9,6 +9,7 @@ import net.kyori.adventure.text.Component;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
 public class CommandAdd {
     private ConfigModel configModel;
@@ -28,14 +29,15 @@ public class CommandAdd {
         }
         String playerName = args[1];
 
-        UserModel findUserInWhitelist = database.getUser(playerName);
+        CompletableFuture<UserModel> findUserInWhitelist = database.getUser(playerName);
 
-        if (findUserInWhitelist != null) {
-            sendAlreadyInWhitelist(sender, playerName);
-            return true;
-        }
-
-        addInWhitelist(sender, playerName);
+        findUserInWhitelist.thenAcceptAsync(user -> {
+            if (user != null) {
+                sendAlreadyInWhitelist(sender, playerName);
+            } else {
+                addInWhitelist(sender, playerName);
+            }
+        });
 
         return true;
     }
@@ -56,7 +58,7 @@ public class CommandAdd {
         Map<String, String> addInWhitelistPlaceholders = new HashMap<>();
         addInWhitelistPlaceholders.put("player_name", playerName);
 
-        database.createUser(playerName);
+        database.createUser(playerName).join();
 
         Component addInWhitelist = messageUtil.create(configModel.getMessageWhitelistAddInfo(), addInWhitelistPlaceholders);
         sender.sendMessage(addInWhitelist);

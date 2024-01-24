@@ -11,11 +11,13 @@ import me.truec0der.mwhitelist.managers.database.MongoDBManager;
 import me.truec0der.mwhitelist.managers.database.YamlDBManager;
 import me.truec0der.mwhitelist.models.ConfigModel;
 import me.truec0der.mwhitelist.utils.MessageUtil;
+import me.truec0der.mwhitelist.utils.MetricsUtil;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class MWhitelist extends JavaPlugin {
     private static MWhitelist instance;
+    private MetricsUtil metricsUtil;
     private ConfigManager configManager;
     private ConfigModel configModel;
     private Database database;
@@ -38,6 +40,8 @@ public final class MWhitelist extends JavaPlugin {
         initializeMessageUtil();
         registerCommandsAndEvents();
 
+        setupMetrics();
+
         getLogger().info("Plugin enabled!");
     }
 
@@ -45,6 +49,7 @@ public final class MWhitelist extends JavaPlugin {
     public void onDisable() {
         closeDatabaseConnection();
         HandlerList.unregisterAll(this);
+        shutdownMetrics();
 
         database = null;
         mongoDBManager = null;
@@ -98,5 +103,14 @@ public final class MWhitelist extends JavaPlugin {
             mongoDBManager.closeConnection();
             getLogger().info("Database MongoDB disconnected!");
         }
+    }
+
+    private void setupMetrics() {
+        int pluginId = 20746; // <-- Replace with the id of your plugin!
+        metricsUtil = new MetricsUtil(this, pluginId);
+    }
+
+    private void shutdownMetrics() {
+        metricsUtil.shutdown();
     }
 }

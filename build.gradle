@@ -4,7 +4,7 @@ plugins {
 }
 
 group = 'me.truec0der'
-version = '1.4.0'
+version = '1.5.0'
 
 repositories {
     mavenCentral()
@@ -27,7 +27,7 @@ dependencies {
     implementation "net.kyori:adventure-text-minimessage:4.14.0"
 }
 
-def targetJavaVersion = 8
+def targetJavaVersion = 9
 java {
     def javaVersion = JavaVersion.toVersion(targetJavaVersion)
     sourceCompatibility = javaVersion

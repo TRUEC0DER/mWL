@@ -34,6 +34,8 @@ public class CommandHandler implements CommandExecutor {
                 return new CommandToggle(configManager, configModel, messageUtil).execute(sender, args);
             case "add":
                 return new CommandAdd(configModel, database, messageUtil).execute(sender, args);
+            case "addtemp":
+                return new CommandAddTemp(configModel, database, messageUtil).execute(sender, args);
             case "remove":
                 return new CommandRemove(configModel, database, messageUtil).execute(sender, args);
             case "list":

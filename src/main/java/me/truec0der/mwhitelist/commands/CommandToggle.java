@@ -6,7 +6,6 @@ import me.truec0der.mwhitelist.utils.MessageUtil;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class CommandToggle {
@@ -22,44 +21,30 @@ public class CommandToggle {
 
     private void sendStatusMessage(Audience sender) {
         boolean whitelistStatus = configModel.getWhitelistStatus();
-        Map<String, String> statusPlaceholders = new HashMap<>();
-        statusPlaceholders.put(
-                "whitelist_status",
-                whitelistStatus ? configModel.getMessageWhitelistStatusEnabled() : configModel.getMessageWhitelistStatusDisabled()
-        );
-        Component statusMessage = messageUtil.create(
+        String statusMessage = whitelistStatus
+                ? configModel.getMessageWhitelistStatusEnabled()
+                : configModel.getMessageWhitelistStatusDisabled();
+
+        Component statusMessageComponent = messageUtil.create(
                 configModel.getMessageWhitelistStatusInfo(),
-                statusPlaceholders
+                Map.of("whitelist_status", statusMessage)
         );
-        sender.sendMessage(statusMessage);
+
+        sender.sendMessage(statusMessageComponent);
     }
 
-    private void enableWhitelist(Audience sender) {
-        configManager.getConfig().set("whitelist.status", true);
+    private void toggleWhitelist(Audience sender, boolean enable) {
+        configManager.getConfig().set("whitelist.status", enable);
         configManager.save();
 
         configManager.reloadConfig();
         configModel.reloadConfig();
 
-        Component enabledMessage = messageUtil.create(
-                configModel.getMessageWhitelistEnabled()
+        Component message = messageUtil.create(
+                enable ? configModel.getMessageWhitelistEnabled() : configModel.getMessageWhitelistDisabled()
         );
 
-        sender.sendMessage(enabledMessage);
-    }
-
-    private void disableWhitelist(Audience sender) {
-        configManager.getConfig().set("whitelist.status", false);
-        configManager.save();
-
-        configManager.reloadConfig();
-        configModel.reloadConfig();
-
-        Component disableMessage = messageUtil.create(
-                configModel.getMessageWhitelistDisabled()
-        );
-
-        sender.sendMessage(disableMessage);
+        sender.sendMessage(message);
     }
 
     public boolean execute(Audience sender, String[] args) {
@@ -68,14 +53,14 @@ public class CommandToggle {
             return true;
         }
 
-        String toggle = args[1];
+        String toggle = args[1].toLowerCase();
 
         switch (toggle) {
             case "on":
-                enableWhitelist(sender);
+                toggleWhitelist(sender, true);
                 return true;
             case "off":
-                disableWhitelist(sender);
+                toggleWhitelist(sender, false);
                 return true;
             default:
                 sendStatusMessage(sender);

@@ -5,11 +5,10 @@ import me.truec0der.mwhitelist.models.ConfigModel;
 import me.truec0der.mwhitelist.models.UserModel;
 import me.truec0der.mwhitelist.utils.MessageUtil;
 import net.kyori.adventure.audience.Audience;
-import net.kyori.adventure.text.Component;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 public class CommandList {
@@ -25,16 +24,15 @@ public class CommandList {
     }
 
     private void sendEmptyWhitelistMessage(Audience sender) {
-        Component emptyMessage = messageUtil.create(configModel.getMessageWhitelistListEmpty());
-        sender.sendMessage(emptyMessage);
+        sender.sendMessage(messageUtil.create(configModel.getMessageWhitelistListEmpty()));
     }
 
     private void sendWhitelistInfoMessage(Audience sender, String playerList) {
-        Map<String, String> infoPlaceholders = new HashMap<>();
-        infoPlaceholders.put("whitelist_list", playerList);
-        infoPlaceholders.put("whitelist_count", String.valueOf(playerCount));
-        Component whitelistInfo = messageUtil.create(configModel.getMessageWhitelistListInfo(), infoPlaceholders);
-        sender.sendMessage(whitelistInfo);
+        Map<String, String> infoPlaceholders = Map.of(
+                "whitelist_list", playerList,
+                "whitelist_count", String.valueOf(playerCount)
+        );
+        sender.sendMessage(messageUtil.create(configModel.getMessageWhitelistListInfo(), infoPlaceholders));
     }
 
     private String getPlayerList(List<String> playerList) {
@@ -51,19 +49,20 @@ public class CommandList {
     }
 
     public boolean execute(Audience sender) {
-        List<UserModel> users = database.getUsers();
+        CompletableFuture<List<UserModel>> usersFuture = database.getUsers();
 
-        if (users.isEmpty()) {
-            sendEmptyWhitelistMessage(sender);
-            return true;
-        }
+        usersFuture.thenAcceptAsync(users -> {
+            if (users.isEmpty()) {
+                sendEmptyWhitelistMessage(sender);
+            } else {
+                List<String> whitelist = users.stream()
+                        .map(UserModel::getNickname)
+                        .collect(Collectors.toList());
 
-        List<String> whitelist = users.stream()
-                .map(UserModel::getNickname)
-                .collect(Collectors.toList());
-
-        String playerList = getPlayerList(whitelist);
-        sendWhitelistInfoMessage(sender, playerList);
+                String playerList = getPlayerList(whitelist);
+                sendWhitelistInfoMessage(sender, playerList);
+            }
+        });
 
         return true;
     }

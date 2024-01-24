@@ -1,15 +1,40 @@
-# mWL - Customizable server whitelist
+[![mWL](https://i.imgur.com/ryDi55Z.png "mWL")](https://github.com/TRUEC0DER/mwl "mWL")
 
-The name speaks for itself. This is a plugin where you can customize **almost anything you want**.
+## About
 
-**The plugin supports databases** (There will be more of them in future):
+**mWL** - is a modern whitelist plugin in which you can customize absolutely everything.
 
-- MongoDB
-- YAML
+## Functional
 
-The plugin has support **HEX-colors and only MiniMessage color formatting.**
-Check more information about this: https://docs.advntr.dev/minimessage/format.html
+- **Various databases** to choose from (**YAML**, **MongoDB**).
+- **Hex** message support with **MiniMessage
+  ** ([More about this](https://docs.advntr.dev/minimessage/format.html "More about this")).
+- Ability to add a player to the whitelist both **temporarily** and **permanently**.
+- **Easy** to understand **configuration**.
+- Regular **development** and **improvement** of the plugin
+- **Open source**.
 
-![Plugin command list](https://cdn.modrinth.com/data/QW7a456H/images/47d8bd73aeed67cb77c1da37c56ef953c2d9645e.png)
+## Commands
 
-The plugin may not work perfectly at the moment, but the quality of the code will improve.
+- All commands required **mwl.admin** permission
+
+| Command                            | Description                                                                       |
+|------------------------------------|-----------------------------------------------------------------------------------|
+| /mwl add [nickname]                | **Permanently** add player to whitelist                                           |
+| /mwl addtemp [nickname] [duration] | **Temporarily** add player to whitelist                                           |
+| /mwl remove [nickname]             | **Remove** player from whitelist                                                  |
+| /mwl list                          | **Get list** of all players in whitelist                                          |
+| /mwl toggle [on/off]               | **Change** the whitelist enabled status. Without args display the current status. |
+
+- **Duration format example** - 1y 2mo 3w 4d 5h 6m 7s (**y** - year, **mo** - month, **w** - week, **d** - day, **h** -
+  hour, **m** - minute, **s** - second)
+
+## Some information
+
+- Plugin work only on **Paper** and **Paper** forks. **Spigot** support will be added in **future versions**.
+- The plugin **weighs so much** because it integrates some **libraries** necessary for it to work (**mongodb-driver**, *
+  *kyori-adventure**).
+- You can report **problems or ideas** in the **issue** of this repository, or in private messages on **Discord** -
+  @truec0der
+
+[![Modrinth](https://i.imgur.com/LIgYCO1.png "Modrinth")](https://modrinth.com/plugin/mwl "Modrinth") [![SpigotMC](https://i.imgur.com/ouQmGYB.png "SpigotMC")](https://www.spigotmc.org/resources/mwl-customizable-server-whitelist.114099/ "Modrinth")

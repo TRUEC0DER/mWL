@@ -1,13 +1,13 @@
 whitelist:
-  status: false
-  isSensitiveCase: false
+  status: false # Is whitelist enabled
+  isSensitiveCase: false # Is the case of a player's nickname sensitive
 database:
-  type: "yaml"
-  mongodb:
-    url: "mongodb://admin:admin@127.0.0.1/mwl"
-    name: "mwl"
-    collections:
-      users: "users"
+  type: "yaml" # Database type (yaml, mongodb)
+  mongodb: # MongoDB settings
+    url: "mongodb://admin:admin@127.0.0.1/mwl" # Connection url
+    name: "mwl" # Database name
+    collections: # Collections name's
+      users: "users" # Users collection
 messages:
   prefix: "<#1aeb71><bold>mWL » <reset>"
   help:
@@ -15,6 +15,7 @@ messages:
     - ""
     - "<#1aeb71><bold>| <reset><#1aeb71>/mwl toggle [on|off] - <white>Change the whitelist status. Using without arguments display the whitelist status."
     - "<#1aeb71><bold>| <reset><#1aeb71>/mwl add [nickname] - <white>Add user to whitelist."
+    - "<#1aeb71><bold>| <reset><#1aeb71>/mwl addtemp [nickname] [time] - <white>Add user to whitelist for time."
     - "<#1aeb71><bold>| <reset><#1aeb71>/mwl remove [nickname] - <white>Remove user from whitelist."
     - "<#1aeb71><bold>| <reset><#1aeb71>/mwl list - <white>View all users in whitelist."
     - "<#1aeb71><bold>| <reset><#1aeb71>/mwl reload - <white>Reload plugin."
@@ -31,6 +32,10 @@ messages:
       info: "%prefix%<white>You have <#1aeb71>added <white>a <#1aeb71>%player_name% <white>player to the whitelist!"
       need-more-args: "%prefix%<white>You must write the player's nickname!"
       already-whitelisted: "%prefix%<white>Player <#eb1a3d>%player_name% <white>already in whitelist!"
+    addtemp:
+      info: "%prefix%<white>You have temporarily <#1aeb71>added <white>a <#1aeb71>%player_name% <white>player to the whitelist! (<#1aeb71>%time_years% <#1aeb71>%time_months% <#1aeb71>%time_weeks% <#1aeb71>%time_days% <#1aeb71>%time_hours% <#1aeb71>%time_minutes% <#1aeb71>%time_seconds%)"
+      need-more-args: "%prefix%<white>You must write the player's nickname and correct time!"
+      time: [ " <white>years", " <white>months", " <white>weeks", " <white>days", " <white>hours", " <white>minutes", " <white>seconds" ]
     remove:
       info: "%prefix%<white>You have <#eb1a3d>removed <white>the player <#eb1a3d>%player_name% <white>from the whitelist!"
       need-more-args: "%prefix%<white>You must write the player's nickname!"
