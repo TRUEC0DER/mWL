@@ -1,49 +1,22 @@
+locale: en
+time-format: "dd/MM/yyyy HH:mm:ss"
 whitelist:
   status: false # Is whitelist enabled
-  isSensitiveCase: false # Is the case of a player's nickname sensitive
+  mode: OFFLINE # ONLINE - use only license uuid's to check player access / OFFLINE - use only non-license uuid's to check player access
+  remove-on-expired: false # Is delete player from database on join when he's time is expired
+  kick-on-remove: false # Is kick player from server when remove he from whitelist with command
+  bypass:
+    permission: # Permission to bypass whitelist join restrictions
+      enabled: false # Is this permission enabled
+      permission: mwl.join.restrict.bypass # Anyone with this permission will be able to enter the server regardless of whether it is on the white list
+  player-check: # Checks if the player is on the whitelist and if he still has time, if not, then kicks the player
+    enabled: false # Is players check enabled
+    initial-delay: 0 # Timer initial delay in milliseconds
+    delay: 60000 # Timer delay in milliseconds
 database:
-  type: "yaml" # Database type (yaml, mongodb)
+  type: JSON # Database type (JSON, MONGO)
   mongodb: # MongoDB settings
     url: "mongodb://admin:admin@127.0.0.1/mwl" # Connection url
     name: "mwl" # Database name
     collections: # Collections name's
       users: "users" # Users collection
-messages:
-  prefix: "<#1aeb71><bold>mWL » <reset>"
-  help:
-    - "%prefix%"
-    - ""
-    - "<#1aeb71><bold>| <reset><#1aeb71>/mwl toggle [on|off] - <white>Change the whitelist status. Using without arguments display the whitelist status."
-    - "<#1aeb71><bold>| <reset><#1aeb71>/mwl add [nickname] - <white>Add user to whitelist."
-    - "<#1aeb71><bold>| <reset><#1aeb71>/mwl addtemp [nickname] [time] - <white>Add user to whitelist for time."
-    - "<#1aeb71><bold>| <reset><#1aeb71>/mwl remove [nickname] - <white>Remove user from whitelist."
-    - "<#1aeb71><bold>| <reset><#1aeb71>/mwl list - <white>View all users in whitelist."
-    - "<#1aeb71><bold>| <reset><#1aeb71>/mwl reload - <white>Reload plugin."
-  whitelist:
-    not-in-whitelist: "%prefix%<#eb1a3d>You are not on the server's whitelist, contact the administration if this may be an error."
-    toggle:
-      enabled: "%prefix%<white>You have <#1aeb71>enabled <white>the whitelist!"
-      disabled: "%prefix%<white>You have <#eb1a3d>disabled <white>the whitelist!"
-      status:
-        enabled: "<#1aeb71>enabled"
-        disabled: "<#eb1a3d>disabled"
-        info: "%prefix%<white>Whitelist status: %whitelist_status%."
-    add:
-      info: "%prefix%<white>You have <#1aeb71>added <white>a <#1aeb71>%player_name% <white>player to the whitelist!"
-      need-more-args: "%prefix%<white>You must write the player's nickname!"
-      already-whitelisted: "%prefix%<white>Player <#eb1a3d>%player_name% <white>already in whitelist!"
-    addtemp:
-      info: "%prefix%<white>You have temporarily <#1aeb71>added <white>a <#1aeb71>%player_name% <white>player to the whitelist! (<#1aeb71>%time_years% <#1aeb71>%time_months% <#1aeb71>%time_weeks% <#1aeb71>%time_days% <#1aeb71>%time_hours% <#1aeb71>%time_minutes% <#1aeb71>%time_seconds%)"
-      need-more-args: "%prefix%<white>You must write the player's nickname and correct time!"
-      time: [ " <white>years", " <white>months", " <white>weeks", " <white>days", " <white>hours", " <white>minutes", " <white>seconds" ]
-    remove:
-      info: "%prefix%<white>You have <#eb1a3d>removed <white>the player <#eb1a3d>%player_name% <white>from the whitelist!"
-      need-more-args: "%prefix%<white>You must write the player's nickname!"
-      not-in-whitelist: "%prefix%<white>The player <#eb1a3d>%player_name% <white>is not in whitelist!"
-    list:
-      info: "%prefix%<white>Whitelist (%whitelist_count% players):</white> %whitelist_list%"
-      empty: "%prefix%<white>Whitelist is empty."
-      user: "<#1aeb71>%player_name%</#1aeb71>"
-      separator: "<white> | "
-    reload: "%prefix%<#1aeb71>Plugin reloaded!"
-  not-perms: "%prefix%<#eb1a3d>You don't have permissions to use this command."
