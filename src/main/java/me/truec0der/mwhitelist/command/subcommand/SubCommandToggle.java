@@ -6,13 +6,13 @@ import lombok.experimental.FieldDefaults;
 import me.truec0der.mwhitelist.command.Command;
 import me.truec0der.mwhitelist.command.CommandContext;
 import me.truec0der.mwhitelist.command.CommandEntity;
-import me.truec0der.mwhitelist.service.ServiceContainer;
+import me.truec0der.mwhitelist.service.ServiceRegister;
 import org.bukkit.command.CommandSender;
 
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class SubCommandToggle implements Command {
-    ServiceContainer serviceContainer;
+    ServiceRegister serviceRegister;
 
     @Override
     public CommandEntity getEntity() {
@@ -30,7 +30,7 @@ public class SubCommandToggle implements Command {
         CommandSender commandSender = context.getSender();
         String action = context.getArgs()[0];
 
-        serviceContainer.getWhitelistActionService().switchWhitelist(commandSender, action);
+        serviceRegister.getWhitelistActionService().switchWhitelist(commandSender, action);
 
         return true;
     }

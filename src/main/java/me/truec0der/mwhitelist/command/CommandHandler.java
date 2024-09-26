@@ -4,10 +4,9 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import me.truec0der.mwhitelist.command.subcommand.*;
-import me.truec0der.mwhitelist.config.ConfigContainer;
+import me.truec0der.mwhitelist.config.ConfigRegister;
 import me.truec0der.mwhitelist.config.configs.LangConfig;
-import me.truec0der.mwhitelist.interfaces.repository.PlayerRepository;
-import me.truec0der.mwhitelist.service.ServiceContainer;
+import me.truec0der.mwhitelist.service.ServiceRegister;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -26,36 +25,36 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class CommandHandler implements CommandExecutor, TabCompleter {
-    CommandManager commandManager;
-    ConfigContainer configContainer;
-    ServiceContainer serviceContainer;
+    CommandController commandController;
+    ConfigRegister configRegister;
+    ServiceRegister serviceRegister;
 
     public void init() {
-        commandManager.command(new SubCommandHelp(serviceContainer).getEntity());
-        commandManager.command(new SubCommandInfo(serviceContainer).getEntity());
-        commandManager.command(new SubCommandToggle(serviceContainer).getEntity());
-        commandManager.command(new SubCommandAdd(serviceContainer).getEntity());
-        commandManager.command(new SubCommandAddTemp(serviceContainer).getEntity());
-        commandManager.command(new SubCommandRemove(serviceContainer).getEntity());
-        commandManager.command(new SubCommandList(serviceContainer).getEntity());
-        commandManager.command(new SubCommandCheck(serviceContainer).getEntity());
-        commandManager.command(new SubCommandReload(serviceContainer).getEntity());
+        commandController.command(new SubCommandHelp(serviceRegister).getEntity());
+        commandController.command(new SubCommandInfo(serviceRegister).getEntity());
+        commandController.command(new SubCommandToggle(serviceRegister).getEntity());
+        commandController.command(new SubCommandAdd(serviceRegister).getEntity());
+        commandController.command(new SubCommandAddTemp(serviceRegister).getEntity());
+        commandController.command(new SubCommandRemove(serviceRegister).getEntity());
+        commandController.command(new SubCommandList(serviceRegister).getEntity());
+        commandController.command(new SubCommandCheck(serviceRegister).getEntity());
+        commandController.command(new SubCommandReload(serviceRegister).getEntity());
     }
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        LangConfig langConfig = configContainer.getLangConfig();
+        LangConfig langConfig = configRegister.getLangConfig();
 
         String[] slicedArgs = args.length > 0 ? Arrays.copyOfRange(args, 1, args.length) : new String[0];
 
         CommandContext commandContext = new CommandContext(sender, slicedArgs);
-        Optional<CommandEntity> emptyCommand = commandManager.findEmptyCommands().stream().findFirst();
+        Optional<CommandEntity> emptyCommand = commandController.findEmptyCommands().stream().findFirst();
 
         if (args.length == 0) {
             return handleEmptyCommand(emptyCommand.orElse(null), commandContext);
         }
 
-        List<CommandEntity> foundCommands = commandManager.findCommands(args[0]);
+        List<CommandEntity> foundCommands = commandController.findCommands(args[0]);
 
         if (foundCommands.isEmpty()) {
             sender.sendMessage(langConfig.getNeedCorrectArgs());
@@ -83,7 +82,7 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
     }
 
     private boolean handleEmptyCommand(CommandEntity commandEntity, CommandContext context) {
-        LangConfig langConfig = configContainer.getLangConfig();
+        LangConfig langConfig = configRegister.getLangConfig();
 
         CommandSender sender = context.getSender();
 
@@ -102,10 +101,10 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
 
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
-        if (args.length == 1) return commandManager.findNames(sender);
+        if (args.length == 1) return commandController.findNames(sender);
 
         String commandName = args[0];
-        List<CommandEntity> foundCommands = commandManager.findCommands(commandName);
+        List<CommandEntity> foundCommands = commandController.findCommands(commandName);
 
         return foundCommands.stream()
                 .filter(entity -> sender.hasPermission(entity.getPermission().get()) && !entity.getName().get().isEmpty())

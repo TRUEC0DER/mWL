@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class CommandManager {
+public class CommandController {
     private final List<CommandEntity> commandEntities = new ArrayList<>();
 
     public void command(CommandEntity entity) {

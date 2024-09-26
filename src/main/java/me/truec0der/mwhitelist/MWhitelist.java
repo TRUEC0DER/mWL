@@ -1,116 +1,83 @@
 package me.truec0der.mwhitelist;
 
-import me.truec0der.mwhitelist.commands.CommandHandler;
-import me.truec0der.mwhitelist.database.Database;
-import me.truec0der.mwhitelist.database.MongoDBDatabase;
-import me.truec0der.mwhitelist.database.YamlDatabase;
-import me.truec0der.mwhitelist.events.PlayerLoginEventListener;
-import me.truec0der.mwhitelist.events.TabCompletionEventListener;
-import me.truec0der.mwhitelist.managers.ConfigManager;
-import me.truec0der.mwhitelist.managers.database.MongoDBManager;
-import me.truec0der.mwhitelist.managers.database.YamlDBManager;
-import me.truec0der.mwhitelist.models.ConfigModel;
-import me.truec0der.mwhitelist.utils.MessageUtil;
-import me.truec0der.mwhitelist.utils.MetricsUtil;
-import org.bukkit.event.HandlerList;
+import me.truec0der.mwhitelist.command.CommandHandler;
+import me.truec0der.mwhitelist.command.CommandController;
+import me.truec0der.mwhitelist.config.ConfigRegister;
+import me.truec0der.mwhitelist.impl.repository.RepositoryRegister;
+import me.truec0der.mwhitelist.listener.PlayerJoinListener;
+import me.truec0der.mwhitelist.misc.ThreadExecutor;
+import me.truec0der.mwhitelist.model.enums.database.DatabaseType;
+import me.truec0der.mwhitelist.service.ServiceRegister;
+import me.truec0der.mwhitelist.service.database.DatabaseConnectionService;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class MWhitelist extends JavaPlugin {
-    private static MWhitelist instance;
-    private MetricsUtil metricsUtil;
-    private ConfigManager configManager;
-    private ConfigModel configModel;
-    private Database database;
-    private MessageUtil messageUtil;
-    private MongoDBManager mongoDBManager;
-    private YamlDBManager yamlDBManager;
-
-    public static void reloadPlugin() {
-        instance.reloadConfig();
-        instance.onDisable();
-        instance.onEnable();
-    }
+    private ConfigRegister configRegister;
+    private RepositoryRegister repositoryRegister;
+    private ServiceRegister serviceRegister;
+    private DatabaseConnectionService databaseConnectionService;
+    private ThreadExecutor threadExecutor;
 
     @Override
     public void onEnable() {
-        instance = this;
-
-        initializeConfig();
-        initializeDatabase();
-        initializeMessageUtil();
-        registerCommandsAndEvents();
-
-        setupMetrics();
+        initConfig();
+        initDatabaseConnection();
+        initRepository();
+        initService();
+        initCommand();
+        initListener();
+        initMetrics();
 
         getLogger().info("Plugin enabled!");
     }
 
     @Override
     public void onDisable() {
-        closeDatabaseConnection();
-        HandlerList.unregisterAll(this);
-        shutdownMetrics();
-
-        database = null;
-        mongoDBManager = null;
-        yamlDBManager = null;
-
+        databaseConnectionService.close();
+        serviceRegister.getWhitelistScheduleService().destroyExecutor();
         getLogger().info("Plugin disabled!");
     }
 
-    private void initializeConfig() {
-        configManager = new ConfigManager(this);
-        configModel = new ConfigModel(configManager);
+    private void initConfig() {
+        configRegister = new ConfigRegister(this);
     }
 
-    private void initializeDatabase() {
-        String databaseType = configModel.getDatabaseType().toLowerCase();
-        switch (databaseType) {
-            case "mongodb":
-                initializeMongoDatabase();
-                break;
-            default:
-                initializeYamlDatabase();
-                break;
-        }
-        getLogger().info("Database " + databaseType.toUpperCase() + " launched!");
+    private void initDatabaseConnection() {
+        databaseConnectionService = new DatabaseConnectionService();
     }
 
-    private void initializeMongoDatabase() {
-        mongoDBManager = new MongoDBManager(configModel.getMongoUrl(), configModel.getMongoName());
-        database = new MongoDBDatabase(mongoDBManager, configModel);
+    private void initRepository() {
+        DatabaseType databaseType = DatabaseType.valueOf("JSON");
+
+        repositoryRegister = new RepositoryRegister(this, databaseConnectionService);
+        repositoryRegister.init(databaseType, configRegister.getMainConfig().getMongoUrl(), configRegister.getMainConfig().getMongoCollectionUser());
+
+        getLogger().info("Database " + databaseType.name() + " loaded!");
     }
 
-    private void initializeYamlDatabase() {
-        yamlDBManager = new YamlDBManager(this, "whitelist.yml");
-        database = new YamlDatabase(yamlDBManager, configModel);
+    private void initService() {
+        threadExecutor = new ThreadExecutor(this);
+        serviceRegister = new ServiceRegister(repositoryRegister, configRegister, threadExecutor);
     }
 
-    private void initializeMessageUtil() {
-        messageUtil = new MessageUtil(configModel);
+    private void initCommand() {
+        CommandController commandManager = new CommandController();
+
+        CommandHandler commandHandler = new CommandHandler(commandManager, configRegister, serviceRegister);
+        commandHandler.init();
+
+        getCommand("mwhitelist").setExecutor(commandHandler);
+        getCommand("mwhitelist").setTabCompleter(commandHandler);
     }
 
-    private void registerCommandsAndEvents() {
-        String commandLabel = "mwhitelist";
-        getCommand(commandLabel).setExecutor(new CommandHandler(configManager, configModel, database, messageUtil));
-        getCommand(commandLabel).setTabCompleter(new TabCompletionEventListener(database));
-        getServer().getPluginManager().registerEvents(
-                (new PlayerLoginEventListener(configModel, database, messageUtil)), this);
+    private void initListener() {
+        PlayerJoinListener playerJoinListener = new PlayerJoinListener(serviceRegister);
+        getServer().getPluginManager().registerEvents(playerJoinListener, this);
     }
 
-    private void closeDatabaseConnection() {
-        if (mongoDBManager != null) {
-            mongoDBManager.closeConnection();
-            getLogger().info("Database MongoDB disconnected!");
-        }
-    }
-
-    private void setupMetrics() {
-        int pluginId = 20746; // <-- Replace with the id of your plugin!
-        metricsUtil = new MetricsUtil(this, pluginId);
-    }
-
-    private void shutdownMetrics() {
-        metricsUtil.shutdown();
+    private void initMetrics() {
+        int pluginId = 20857;
+        Metrics metrics = new Metrics(this, pluginId);
     }
 }

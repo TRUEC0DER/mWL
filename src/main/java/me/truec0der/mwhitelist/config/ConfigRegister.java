@@ -10,14 +10,14 @@ import org.bukkit.plugin.Plugin;
 import java.io.File;
 
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ConfigContainer {
+public class ConfigRegister {
     final Plugin plugin;
     @Getter
     MainConfig mainConfig;
     @Getter
     LangConfig langConfig;
 
-    public ConfigContainer(Plugin plugin) {
+    public ConfigRegister(Plugin plugin) {
         this.plugin = plugin;
         init();
     }

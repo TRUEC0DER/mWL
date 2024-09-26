@@ -6,19 +6,13 @@ import lombok.experimental.FieldDefaults;
 import me.truec0der.mwhitelist.command.Command;
 import me.truec0der.mwhitelist.command.CommandContext;
 import me.truec0der.mwhitelist.command.CommandEntity;
-import me.truec0der.mwhitelist.interfaces.repository.PlayerRepository;
-import me.truec0der.mwhitelist.service.ServiceContainer;
-import me.truec0der.mwhitelist.util.TimeUtil;
-import org.bukkit.Bukkit;
+import me.truec0der.mwhitelist.service.ServiceRegister;
 import org.bukkit.command.CommandSender;
-
-import java.util.Arrays;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class SubCommandAddTemp implements Command {
-    ServiceContainer serviceContainer;
+    ServiceRegister serviceRegister;
 
     @Override
     public CommandEntity getEntity() {
@@ -36,7 +30,7 @@ public class SubCommandAddTemp implements Command {
         CommandSender commandSender = context.getSender();
         String nickname = context.getArgs()[0];
 
-        serviceContainer.getWhitelistActionService().addPlayerTemp(
+        serviceRegister.getWhitelistActionService().addPlayerTemp(
                 commandSender,
                 nickname,
                 context.getArgs()

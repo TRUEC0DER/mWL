@@ -6,7 +6,9 @@ load: STARTUP
 authors: [ TRUEC0DER ]
 description: Server whitelist using MongoDB
 website: https://github.com/TRUEC0DER
+libraries:
+  - org.mongodb:mongodb-driver-sync:4.11.1
 commands:
   mwhitelist:
-    description: "Customizable server whitelist using MongoDB"
+    description: "UUID-based server whitelist using MongoDB and more"
     aliases: [ mwl ]

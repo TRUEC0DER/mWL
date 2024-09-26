@@ -1,0 +1,79 @@
+prefix: "<#1aeb71>mWL » <reset>"
+need-correct-args: "%prefix%<#eb1a3d>Need more or correct args to use this command"
+not-in-whitelist: "%prefix%<white>You are not on the server's whitelist, contact the administration if this may be an error."
+whitelist-time-expired: "%prefix%<white>Your time on the whitelist expired at <#1aeb71>%player_time%."
+not-perms: "%prefix%<#eb1a3d>You don't have permissions to use this command."
+command:
+  help:
+    info: |-
+      %prefix%<white>Plugin help
+      <#1aeb71>»
+      <#1aeb71>» /mwl info - <white>Some information about whitelist.
+      <#1aeb71>» /mwl toggle [enable|disable] - <white>Change the whitelist status.
+      <#1aeb71>» /mwl add [nickname] - <white>Add player to whitelist.
+      <#1aeb71>» /mwl addtemp [nickname] [formatted_time|unix_time] - <white>Add player to whitelist for time.
+      <#1aeb71>» /mwl remove [nickname] - <white>Remove player from whitelist.
+      <#1aeb71>» /mwl list - <white>View all players in whitelist.
+      <#1aeb71>» /mwl check [nickname] - <white>View whitelist information about player.
+      <#1aeb71>» /mwl reload - <white>Reload plugin configs and database.
+      <#1aeb71>»
+      %prefix%<white>Plugin help
+  info:
+    info: |-
+      %prefix%<white>Whitelist info
+      <#1aeb71>»
+      <#1aeb71>» <white>Mode: <#1aeb71>%whitelist_mode%
+      <#1aeb71>»
+      <#1aeb71>» <white>Status: <#1aeb71>%whitelist_status%
+      <#1aeb71>» <white>Players count: <#1aeb71>%whitelist_size%
+      <#1aeb71>»
+      %prefix%<white>Whitelist info
+    status:
+      enabled: "<#1aeb71>enabled"
+      disabled: "<#eb1a3d>disabled"
+  toggle:
+    invalid-action: "%prefix%<white>The action you entered is invalid!"
+    enabled: "%prefix%<white>You have <#1aeb71>enabled <white>the whitelist!"
+    disabled: "%prefix%<white>You have <#eb1a3d>disabled <white>the whitelist!"
+  add:
+    already-added: "%prefix%<white>Player <#eb1a3d>%player_nickname% <white>already in whitelist!"
+    added: "%prefix%<white>You have <#1aeb71>added <white>a <#1aeb71>%player_nickname% <white>player to the whitelist!"
+  add-temp:
+    invalid-time: "%prefix%<white>The time you entered is invalid!"
+    already-added: "%prefix%<white>Player <#eb1a3d>%player_nickname% <white>already in whitelist!"
+    added: "%prefix%<white>You have <#1aeb71>added <white>a <#1aeb71>%player_nickname% <white>player to the whitelist until <#1aeb71>%player_time%!"
+  remove:
+    not-in: "%prefix%<white>The player <#eb1a3d>%player_nickname% <white>is not in whitelist!"
+    removed: "%prefix%<white>You have <#eb1a3d>removed <white>the player <#eb1a3d>%player_nickname% <white>from the whitelist!"
+  list:
+    info: "%prefix%<white>Whitelist (%list_size% players):</white> %player_list%"
+    empty: "%prefix%<white>Whitelist is empty."
+    player: "<#1aeb71>%player_nickname%</#1aeb71>"
+    separator: "<white> | "
+  check:
+    not-in: "%prefix%<white>The player <#eb1a3d>%player_nickname% <white>is not in whitelist!"
+    info: |-
+      %prefix%<white>Info about <#1aeb71>%player_nickname%
+      <#1aeb71>»
+      <#1aeb71>» <white>Offline UUID: <#1aeb71>%player_offline_uuid%
+      <#1aeb71>» <white>Online UUID: <#1aeb71>%player_online_uuid%
+      <#1aeb71>»
+      <#1aeb71>» <white>Nickname history: %player_nickname_list%
+      <#1aeb71>»
+      <#1aeb71>» <white>Last update: <#1aeb71>%player_last_update%
+      <#1aeb71>» <white>Time: until <#1aeb71>%player_time% <white>(%player_time_about%<white>)
+      <#1aeb71>»
+      %prefix%<white>Info about <#1aeb71>%player_nickname%
+    nickname-history:
+      nickname: "<#1aeb71>%recorded_nickname%</#1aeb71>"
+      separator: "<white> | "
+    time:
+      infinity:
+        info: "∞"
+        about: "<gradient:#96ff8f:#8cecff>forever<white>"
+      expired:
+        about: "<#eb1a3d>expired<white>"
+      active:
+        about: "<#1aeb71>active<white>"
+  reload:
+    info: "%prefix%<#1aeb71>Plugin reloaded!"
