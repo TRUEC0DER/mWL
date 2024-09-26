@@ -14,11 +14,16 @@ import java.util.function.Supplier;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CommandEntity {
-    @NonNull Supplier<String> name;
-    @NonNull Supplier<String> regex;
-    @NonNull Supplier<String[]> completeArgs;
-    @NonNull Supplier<String> permission;
-    @NonNull Function<CommandContext, Boolean> handler;
+    @NonNull
+    Supplier<String> name;
+    @NonNull
+    Supplier<String> regex;
+    @NonNull
+    Supplier<String[]> completeArgs;
+    @NonNull
+    Supplier<String> permission;
+    @NonNull
+    Function<CommandContext, Boolean> handler;
 
     public boolean execute(CommandContext context) {
         return getHandler().apply(context);

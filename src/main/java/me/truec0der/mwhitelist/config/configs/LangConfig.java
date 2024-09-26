@@ -30,6 +30,18 @@ public class LangConfig extends ConfigHolder {
         init();
     }
 
+    private static Component getComponent(String string) {
+        MiniMessage miniMessage = MiniMessage.miniMessage();
+        return miniMessage.deserialize(string)
+                .replaceText(text -> text.match("%prefix%").replacement(prefix));
+    }
+
+    public static String getString(Component component) {
+        MiniMessage miniMessage = MiniMessage.miniMessage();
+        return miniMessage.serialize(component)
+                .replace("%prefix%", miniMessage.serialize(prefix));
+    }
+
     @Override
     public void init() {
         YamlConfiguration config = this.getConfig();
@@ -258,17 +270,5 @@ public class LangConfig extends ConfigHolder {
                     .info(getComponent(section.getString("info")))
                     .build();
         }
-    }
-
-    private static Component getComponent(String string) {
-        MiniMessage miniMessage = MiniMessage.miniMessage();
-        return miniMessage.deserialize(string)
-                .replaceText(text -> text.match("%prefix%").replacement(prefix));
-    }
-
-    public static String getString(Component component) {
-        MiniMessage miniMessage = MiniMessage.miniMessage();
-        return miniMessage.serialize(component)
-                .replace("%prefix%", miniMessage.serialize(prefix));
     }
 }

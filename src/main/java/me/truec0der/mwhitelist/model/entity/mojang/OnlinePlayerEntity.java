@@ -11,8 +11,10 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class OnlinePlayerEntity {
-    @NonNull String id;
-    @NonNull String nickname;
+    @NonNull
+    String id;
+    @NonNull
+    String nickname;
 
     public static OnlinePlayerEntity toEntity(JsonObject jsonObject) {
         if (!jsonObject.has("id") || !jsonObject.has("nickname")) return null;

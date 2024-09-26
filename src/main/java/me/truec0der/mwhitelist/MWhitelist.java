@@ -1,7 +1,7 @@
 package me.truec0der.mwhitelist;
 
-import me.truec0der.mwhitelist.command.CommandHandler;
 import me.truec0der.mwhitelist.command.CommandController;
+import me.truec0der.mwhitelist.command.CommandHandler;
 import me.truec0der.mwhitelist.config.ConfigRegister;
 import me.truec0der.mwhitelist.config.configs.MainConfig;
 import me.truec0der.mwhitelist.impl.repository.RepositoryRegister;

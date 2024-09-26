@@ -5,7 +5,6 @@ import com.google.gson.GsonBuilder;
 import lombok.experimental.UtilityClass;
 import me.truec0der.mwhitelist.model.entity.mojang.OnlinePlayerEntity;
 import me.truec0der.mwhitelist.model.enums.database.ModeType;
-import org.bukkit.Bukkit;
 
 import java.io.IOException;
 import java.net.URI;

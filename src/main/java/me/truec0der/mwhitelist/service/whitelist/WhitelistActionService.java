@@ -144,7 +144,8 @@ public class WhitelistActionService extends Service {
                 playerRepository.remove(playerUuid, mode.isOnline());
 
                 if (player != null && player.isOnline() && mainConfig.getKickOnRemove()) {
-                    if (mainConfig.getBypassPermissionEnabled() && player.hasPermission(mainConfig.getBypassPermission())) return;
+                    if (mainConfig.getBypassPermissionEnabled() && player.hasPermission(mainConfig.getBypassPermission()))
+                        return;
                     threadExecutor.runInMainThread(() -> player.kick(langConfig.getNotInWhitelist()));
                 }
 

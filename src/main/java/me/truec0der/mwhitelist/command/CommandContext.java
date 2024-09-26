@@ -11,6 +11,8 @@ import org.bukkit.command.CommandSender;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CommandContext {
-    @NonNull CommandSender sender;
-    @NonNull String[] args;
+    @NonNull
+    CommandSender sender;
+    @NonNull
+    String[] args;
 }
