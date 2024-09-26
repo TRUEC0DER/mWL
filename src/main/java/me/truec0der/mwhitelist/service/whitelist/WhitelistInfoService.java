@@ -29,10 +29,10 @@ public class WhitelistInfoService extends Service {
     }
 
     public void sendPlayerList(CommandSender sender) {
-        MainConfig mainConfig = getConfigContainer().getMainConfig();
-        LangConfig langConfig = getConfigContainer().getLangConfig();
+        MainConfig mainConfig = getConfigRegister().getMainConfig();
+        LangConfig langConfig = getConfigRegister().getLangConfig();
 
-        PlayerRepository playerRepository = getRepositoryContainer().getPlayerRepository();
+        PlayerRepository playerRepository = getRepositoryRegister().getPlayerRepository();
 
         CompletableFuture.runAsync(() -> {
             LangConfig.CommandList listCommand = langConfig.getCommand().getList();
@@ -71,10 +71,10 @@ public class WhitelistInfoService extends Service {
     }
 
     public void sendPlayerInfo(CommandSender sender, String nickname) {
-        MainConfig mainConfig = getConfigContainer().getMainConfig();
-        LangConfig langConfig = getConfigContainer().getLangConfig();
+        MainConfig mainConfig = getConfigRegister().getMainConfig();
+        LangConfig langConfig = getConfigRegister().getLangConfig();
 
-        PlayerRepository playerRepository = getRepositoryContainer().getPlayerRepository();
+        PlayerRepository playerRepository = getRepositoryRegister().getPlayerRepository();
 
         CompletableFuture.runAsync(() -> {
             LangConfig.CommandCheck checkCommand = langConfig.getCommand().getCheck();
@@ -126,10 +126,10 @@ public class WhitelistInfoService extends Service {
     }
 
     public void sendWhitelistInfo(CommandSender sender) {
-        MainConfig mainConfig = getConfigContainer().getMainConfig();
-        LangConfig langConfig = getConfigContainer().getLangConfig();
+        MainConfig mainConfig = getConfigRegister().getMainConfig();
+        LangConfig langConfig = getConfigRegister().getLangConfig();
 
-        PlayerRepository playerRepository = getRepositoryContainer().getPlayerRepository();
+        PlayerRepository playerRepository = getRepositoryRegister().getPlayerRepository();
 
         CompletableFuture.runAsync(() -> {
             LangConfig.CommandInfo infoCommand = langConfig.getCommand().getInfo();
@@ -147,12 +147,12 @@ public class WhitelistInfoService extends Service {
     }
 
     public void sendHelp(CommandSender sender) {
-        LangConfig langConfig = getConfigContainer().getLangConfig();
+        LangConfig langConfig = getConfigRegister().getLangConfig();
         sender.sendMessage(langConfig.getCommand().getHelp().getInfo());
     }
 
     public List<String> getWhitelistNicknames() {
-        return getRepositoryContainer().getPlayerRepository().find().stream().map(player -> {
+        return getRepositoryRegister().getPlayerRepository().find().stream().map(player -> {
             List<String> nicknameHistory = player.getInfo().getNicknameHistory();
             return nicknameHistory.get(nicknameHistory.size() - 1);
         }).collect(Collectors.toList());

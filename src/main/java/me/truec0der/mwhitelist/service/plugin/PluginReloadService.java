@@ -17,25 +17,25 @@ public class PluginReloadService extends Service {
     }
 
     public void reload() {
-        MainConfig mainConfig = getConfigContainer().getMainConfig();
-        LangConfig langConfig = getConfigContainer().getLangConfig();
+        MainConfig mainConfig = getConfigRegister().getMainConfig();
+        LangConfig langConfig = getConfigRegister().getLangConfig();
 
         mainConfig.reload();
         langConfig.reload();
 
-        getRepositoryContainer().init(
+        getRepositoryRegister().init(
                 mainConfig.getDatabaseType(),
                 mainConfig.getMongoUrl(),
                 mainConfig.getMongoCollectionUser()
         );
 
-        getServiceContainer().init();
+        getServiceRegister().init();
     }
 
     public void reload(CommandSender sender) {
         reload();
 
-        LangConfig langConfig = getConfigContainer().getLangConfig();
+        LangConfig langConfig = getConfigRegister().getLangConfig();
         sender.sendMessage(langConfig.getCommand().getReload().getInfo());
     }
 }

@@ -35,10 +35,10 @@ public class WhitelistScheduleService extends Service {
     public void initExecutor() {
         destroyExecutor();
 
-        MainConfig mainConfig = getConfigContainer().getMainConfig();
-        LangConfig langConfig = getConfigContainer().getLangConfig();
+        MainConfig mainConfig = getConfigRegister().getMainConfig();
+        LangConfig langConfig = getConfigRegister().getLangConfig();
 
-        PlayerRepository playerRepository = getRepositoryContainer().getPlayerRepository();
+        PlayerRepository playerRepository = getRepositoryRegister().getPlayerRepository();
 
         if (!mainConfig.getStatus() || !mainConfig.getPlayersCheckEnabled()) return;
 

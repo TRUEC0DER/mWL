@@ -36,10 +36,10 @@ public class WhitelistActionService extends Service {
     }
 
     public void addPlayer(CommandSender sender, String nickname) {
-        MainConfig mainConfig = getConfigContainer().getMainConfig();
-        LangConfig langConfig = getConfigContainer().getLangConfig();
+        MainConfig mainConfig = getConfigRegister().getMainConfig();
+        LangConfig langConfig = getConfigRegister().getLangConfig();
 
-        PlayerRepository playerRepository = getRepositoryContainer().getPlayerRepository();
+        PlayerRepository playerRepository = getRepositoryRegister().getPlayerRepository();
 
         ModeType mode = mainConfig.getMode();
 
@@ -69,10 +69,10 @@ public class WhitelistActionService extends Service {
     }
 
     public void addPlayerTemp(CommandSender sender, String nickname, String[] time) {
-        MainConfig mainConfig = getConfigContainer().getMainConfig();
-        LangConfig langConfig = getConfigContainer().getLangConfig();
+        MainConfig mainConfig = getConfigRegister().getMainConfig();
+        LangConfig langConfig = getConfigRegister().getLangConfig();
 
-        PlayerRepository playerRepository = getRepositoryContainer().getPlayerRepository();
+        PlayerRepository playerRepository = getRepositoryRegister().getPlayerRepository();
 
         ModeType mode = mainConfig.getMode();
 
@@ -125,10 +125,10 @@ public class WhitelistActionService extends Service {
     }
 
     public void removePlayer(CommandSender sender, String nickname) {
-        MainConfig mainConfig = getConfigContainer().getMainConfig();
-        LangConfig langConfig = getConfigContainer().getLangConfig();
+        MainConfig mainConfig = getConfigRegister().getMainConfig();
+        LangConfig langConfig = getConfigRegister().getLangConfig();
 
-        PlayerRepository playerRepository = getRepositoryContainer().getPlayerRepository();
+        PlayerRepository playerRepository = getRepositoryRegister().getPlayerRepository();
 
         ModeType mode = mainConfig.getMode();
 
@@ -162,8 +162,8 @@ public class WhitelistActionService extends Service {
     }
 
     private void setWhitelistStatus(CommandSender sender, boolean status) {
-        MainConfig mainConfig = getConfigContainer().getMainConfig();
-        LangConfig langConfig = getConfigContainer().getLangConfig();
+        MainConfig mainConfig = getConfigRegister().getMainConfig();
+        LangConfig langConfig = getConfigRegister().getLangConfig();
 
         LangConfig.CommandToggle toggleCommand = langConfig.getCommand().getToggle();
         mainConfig.setStatus(status);
@@ -172,7 +172,7 @@ public class WhitelistActionService extends Service {
     }
 
     public void switchWhitelist(CommandSender sender, String action) {
-        LangConfig langConfig = getConfigContainer().getLangConfig();
+        LangConfig langConfig = getConfigRegister().getLangConfig();
 
         switch (action) {
             case "enable":
@@ -187,10 +187,10 @@ public class WhitelistActionService extends Service {
     }
 
     public void handleJoin(PlayerLoginEvent event) {
-        MainConfig mainConfig = getConfigContainer().getMainConfig();
-        LangConfig langConfig = getConfigContainer().getLangConfig();
+        MainConfig mainConfig = getConfigRegister().getMainConfig();
+        LangConfig langConfig = getConfigRegister().getLangConfig();
 
-        PlayerRepository playerRepository = getRepositoryContainer().getPlayerRepository();
+        PlayerRepository playerRepository = getRepositoryRegister().getPlayerRepository();
 
         if (!mainConfig.getStatus()) return;
 
