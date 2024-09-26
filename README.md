@@ -14,6 +14,8 @@
 - Regular **development** and **improvement** of the plugin
 - **Open source**.
 
+[Discord](https://discord.gg/ZEkU4R9ZYY)
+
 ## Commands
 
 - All commands required **mwl.admin** permission
