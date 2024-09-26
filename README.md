@@ -1,4 +1,4 @@
-[![mWL](https://i.imgur.com/ryDi55Z.png "mWL")](https://github.com/TRUEC0DER/mwl "mWL")
+[![mWL](https://cdn.modrinth.com/data/QW7a456H/images/5862225ea62ae9bbaef203e19291338ea84653fb.png "mWL")](https://github.com/TRUEC0DER/mwl "mWL")
 
 ## About
 
