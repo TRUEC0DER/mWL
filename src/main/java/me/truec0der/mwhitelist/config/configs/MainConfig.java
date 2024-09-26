@@ -14,6 +14,8 @@ import java.text.SimpleDateFormat;
 public class MainConfig extends ConfigHolder {
     private String locale;
     private SimpleDateFormat timeFormat;
+    private Boolean updateCheck;
+    private Boolean updateAuto;
     private Boolean status;
     private ModeType mode;
     private Boolean removeOnExpired;
@@ -40,6 +42,9 @@ public class MainConfig extends ConfigHolder {
 
         locale = config.getString("locale");
         timeFormat = new SimpleDateFormat(config.getString("time-format"));
+
+        updateCheck = config.getBoolean("main.update.check");
+        updateAuto = config.getBoolean("main.update.auto");
 
         status = config.getBoolean("whitelist.status");
         mode = ModeType.valueOf(config.getString("whitelist.mode"));

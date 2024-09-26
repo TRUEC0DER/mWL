@@ -1,7 +1,7 @@
 name: mWL
 version: '${version}'
 main: me.truec0der.mwhitelist.MWhitelist
-api-version: '1.16'
+api-version: '1.17'
 load: STARTUP
 authors: [ TRUEC0DER ]
 description: Server whitelist using MongoDB

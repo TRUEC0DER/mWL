@@ -3,14 +3,18 @@ package me.truec0der.mwhitelist;
 import me.truec0der.mwhitelist.command.CommandHandler;
 import me.truec0der.mwhitelist.command.CommandController;
 import me.truec0der.mwhitelist.config.ConfigRegister;
+import me.truec0der.mwhitelist.config.configs.MainConfig;
 import me.truec0der.mwhitelist.impl.repository.RepositoryRegister;
 import me.truec0der.mwhitelist.listener.PlayerJoinListener;
 import me.truec0der.mwhitelist.misc.ThreadExecutor;
 import me.truec0der.mwhitelist.model.enums.database.DatabaseType;
 import me.truec0der.mwhitelist.service.ServiceRegister;
 import me.truec0der.mwhitelist.service.database.DatabaseConnectionService;
+import me.truec0der.mwhitelist.service.plugin.PluginUpdateServiceImpl;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.nio.file.Paths;
 
 public final class MWhitelist extends JavaPlugin {
     private ConfigRegister configRegister;
@@ -28,6 +32,7 @@ public final class MWhitelist extends JavaPlugin {
         initCommand();
         initListener();
         initMetrics();
+        initPluginUpdateService();
 
         getLogger().info("Plugin enabled!");
     }
@@ -79,5 +84,17 @@ public final class MWhitelist extends JavaPlugin {
     private void initMetrics() {
         int pluginId = 20857;
         Metrics metrics = new Metrics(this, pluginId);
+    }
+
+    private void initPluginUpdateService() {
+        MainConfig mainConfig = configRegister.getMainConfig();
+
+        String destinationPath = Paths.get(getDataFolder().getAbsolutePath()).getParent().toString();
+        String[] destinationPathSplit = getFile().getPath().split("/");
+        String destinationName = destinationPathSplit[destinationPathSplit.length - 1];
+
+        PluginUpdateServiceImpl pluginUpdateService = new PluginUpdateServiceImpl("https://truec0der.github.io/plugin/mWL.json", destinationPath, destinationName, configRegister.getLangConfig());
+        if (mainConfig.getUpdateCheck())
+            pluginUpdateService.handleCheck(getDescription().getVersion(), mainConfig.getUpdateAuto());
     }
 }

@@ -20,6 +20,8 @@ public class LangConfig extends ConfigHolder {
     private Component notInWhitelist;
     private Component whitelistTimeExpired;
     private Component notPerms;
+
+    private Main main;
     private Command command;
 
     public LangConfig(Plugin plugin, File filePath, String file, String defaultFile) {
@@ -38,7 +40,42 @@ public class LangConfig extends ConfigHolder {
         whitelistTimeExpired = getComponent(config.getString("whitelist-time-expired"));
         notPerms = getComponent(config.getString("not-perms"));
 
+        main = Main.serialize(config.getConfigurationSection("main"));
         command = Command.serialize(config.getConfigurationSection("command"));
+    }
+
+    @Getter
+    @Builder
+    @FieldDefaults(level = AccessLevel.PRIVATE)
+    public static class Main {
+        MainUpdate update;
+
+        public static Main serialize(ConfigurationSection section) {
+            return Main.builder()
+                    .update(MainUpdate.serialize(section.getConfigurationSection("update")))
+                    .build();
+        }
+    }
+
+    @Getter
+    @Builder
+    @FieldDefaults(level = AccessLevel.PRIVATE)
+    public static class MainUpdate {
+        Component notify;
+        Component notifyFailed;
+        Component versionInfo;
+        Component action;
+        Component actionFailed;
+
+        public static MainUpdate serialize(ConfigurationSection section) {
+            return MainUpdate.builder()
+                    .notify(getComponent(section.getString("notify")))
+                    .notifyFailed(getComponent(section.getString("notify-failed")))
+                    .versionInfo(getComponent(section.getString("version-info")))
+                    .action(getComponent(section.getString("action")))
+                    .actionFailed(getComponent(section.getString("action-failed")))
+                    .build();
+        }
     }
 
     @Getter
@@ -149,7 +186,6 @@ public class LangConfig extends ConfigHolder {
         }
     }
 
-
     @Getter
     @Builder
     @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -228,5 +264,11 @@ public class LangConfig extends ConfigHolder {
         MiniMessage miniMessage = MiniMessage.miniMessage();
         return miniMessage.deserialize(string)
                 .replaceText(text -> text.match("%prefix%").replacement(prefix));
+    }
+
+    public static String getString(Component component) {
+        MiniMessage miniMessage = MiniMessage.miniMessage();
+        return miniMessage.serialize(component)
+                .replace("%prefix%", miniMessage.serialize(prefix));
     }
 }
