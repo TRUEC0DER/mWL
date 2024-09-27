@@ -22,7 +22,7 @@ public class ConfigRegister {
         init();
     }
 
-    private void init() {
+    public void init() {
         mainConfig = new MainConfig(plugin, new File(plugin.getDataFolder().getPath()), "config.yml");
         langConfig = new LangConfig(plugin, new File(plugin.getDataFolder().getPath()), String.format("messages/lang_%s.yml", mainConfig.getLocale()), "messages/lang_en.yml");
     }
